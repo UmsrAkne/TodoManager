@@ -38,5 +38,24 @@ namespace TodoManager2.model {
                 conn.Close();
             }
         }
+
+        public void insert(string tableName, string[] columnNames, string[] values) {
+            var commandText = "INSERT INTO " + tableName + " ";
+
+            var columnNamePart = "(";
+            new List<String>(columnNames).ForEach(tn => columnNamePart += tn + ", ");
+            columnNamePart = columnNamePart.Substring(0, columnNamePart.Length - 2);
+            columnNamePart += ")";
+
+            var valuePart = "VALUES (";
+            new List<String>(values).ForEach(v => valuePart += "'" + v + "', ");
+            valuePart = valuePart.Substring(0, valuePart.Length - 2);
+            valuePart += ");";
+
+            commandText += columnNamePart + " " + valuePart;
+
+            executeNonQuery(commandText);
+        }
+
     }
 }
