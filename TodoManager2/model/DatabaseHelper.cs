@@ -39,6 +39,30 @@ namespace TodoManager2.model {
             }
         }
 
+        /// <summary>
+        /// パラメーターに指定したコマンドを実行し、取得したSQLiteDataReaderから情報を読み込む
+        /// </summary>
+        /// <param name="commandText"></param>
+        /// <returns>内部で取得したSQLiteDataReaderの値をすべて詰め込んだオブジェクトを取得する</returns>
+        public List<Dictionary<string, object>> select(string commandText) {
+            using(var conn = new SQLiteConnection("Data Source=" + DatabaseName + ".sqlite")) {
+                SQLiteCommand command = new SQLiteCommand(commandText, conn);
+                conn.Open();
+
+                using (SQLiteDataReader sdr = command.ExecuteReader()) {
+                    var dictionarys = new List<Dictionary<string, object>>();
+                    while (sdr.Read()) {
+                        var dic = new Dictionary<string, object>();
+                        for(var i=0; i < sdr.FieldCount; i++) {
+                            dic[sdr.GetName(i)] = sdr.GetValue(i);
+                        }
+                        dictionarys.Add(dic);
+                    }
+                    return dictionarys;
+                }
+            }
+        }
+
         public void insert(string tableName, string[] columnNames, string[] values) {
             var commandText = "INSERT INTO " + tableName + " ";
 
