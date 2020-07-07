@@ -46,19 +46,19 @@ namespace TodoManager2.model {
         /// <returns>内部で取得したSQLiteDataReaderの値をすべて詰め込んだオブジェクトを取得する</returns>
         public List<Dictionary<string, object>> select(string commandText) {
             using(var conn = new SQLiteConnection("Data Source=" + DatabaseName + ".sqlite")) {
-                SQLiteCommand command = new SQLiteCommand(commandText, conn);
-                conn.Open();
-
-                using (SQLiteDataReader sdr = command.ExecuteReader()) {
-                    var dictionarys = new List<Dictionary<string, object>>();
-                    while (sdr.Read()) {
-                        var dic = new Dictionary<string, object>();
-                        for(var i=0; i < sdr.FieldCount; i++) {
-                            dic[sdr.GetName(i)] = sdr.GetValue(i);
+                using(var command = new SQLiteCommand(commandText, conn)) {
+                    conn.Open();
+                    using (SQLiteDataReader sdr = command.ExecuteReader()) {
+                        var dictionarys = new List<Dictionary<string, object>>();
+                        while (sdr.Read()) {
+                            var dic = new Dictionary<string, object>();
+                            for(var i=0; i < sdr.FieldCount; i++) {
+                                dic[sdr.GetName(i)] = sdr.GetValue(i);
+                            }
+                            dictionarys.Add(dic);
                         }
-                        dictionarys.Add(dic);
+                        return dictionarys;
                     }
-                    return dictionarys;
                 }
             }
         }
