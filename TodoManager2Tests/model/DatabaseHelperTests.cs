@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
 
 namespace TodoManager2.model.Tests {
     [TestClass()]
@@ -59,6 +58,11 @@ namespace TodoManager2.model.Tests {
 
             Assert.AreEqual(vals.Count, 1);
             Assert.AreEqual(vals[0][secondColumnName], "testText");
+        }
+
+        [TestCleanup()]
+        public void cleanup() {
+            System.IO.File.Delete(dbName + ".sqlite");
         }
     }
 }

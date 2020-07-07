@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
+using System.IO;
 
 namespace TodoManager2.model {
     public class DatabaseHelper {
@@ -17,7 +18,9 @@ namespace TodoManager2.model {
         }
 
         private void create() {
-            SQLiteConnection.CreateFile(DatabaseName + ".sqlite");
+            if(!File.Exists(DatabaseName + ".sqlite")) {
+                SQLiteConnection.CreateFile(DatabaseName + ".sqlite");
+            }
         }
 
         private void createTable(String tableName) {
