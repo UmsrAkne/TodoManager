@@ -22,7 +22,7 @@ namespace TodoManager2.model {
 
         private void createTable(String tableName) {
             var createTableCommandText = "CREATE TABLE IF NOT EXISTS " + tableName + " ( " +
-                                         "name TEXT NOT NULL" +
+                                         "id INTEGER PRIMARY KEY NOT NULL" +
                                          ");";
             executeNonQuery(createTableCommandText);
         }
