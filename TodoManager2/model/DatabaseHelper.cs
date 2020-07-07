@@ -27,6 +27,19 @@ namespace TodoManager2.model {
             executeNonQuery(createTableCommandText);
         }
 
+        /// <summary>
+        /// 指定したテーブルにNotNull制約のついた列を追加します
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="columnName"></param>
+        /// <param name="type">列の型を指定します</param>
+        public void addNotNullColumn(string tableName, string columnName, string type) {
+            var addColumnCommandText =
+                "ALTER TABLE " + tableName + " ADD COLUMN " + columnName + " " + type + " NOT NULL;";
+
+            executeNonQuery(addColumnCommandText);
+        }
+
         private void executeNonQuery(string commandText) {
             using (var conn = new SQLiteConnection("Data Source=" + DatabaseName + ".sqlite")) {
                 conn.Open();
