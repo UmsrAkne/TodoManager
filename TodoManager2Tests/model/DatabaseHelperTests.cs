@@ -22,22 +22,24 @@ namespace TodoManager2.model.Tests {
         public void insertTest() {
             var dbh = new DatabaseHelper(dbName);
 
-            string[] columnNames = { "name" };
+            string cName = "id";
+            string[] columnNames = { cName };
 
-            string[] values0 = { "valueTest1" };
-            string[] values1 = { "valueTest2" };
-            string[] values2 = { "valueTest3" };
+            string[] values0 = { "1" };
+            string[] values1 = { "2" };
+            string[] values2 = { "3" };
 
             dbh.insert("todos", columnNames, values0);
             dbh.insert("todos", columnNames, values1);
             dbh.insert("todos", columnNames, values2);
 
-            var vals = dbh.select("SELECT name FROM todos;");
+            var vals = dbh.select("SELECT " + cName + " FROM todos;");
 
             Assert.AreEqual(vals.Count, 3);
-            Assert.AreEqual(vals[0]["name"], "valueTest1");
-            Assert.AreEqual(vals[1]["name"], "valueTest2");
-            Assert.AreEqual(vals[2]["name"], "valueTest3");
+
+            Assert.AreEqual(vals[1][cName],(long)2);
+            Assert.AreEqual(vals[1][cName],(long)2);
+            Assert.AreEqual(vals[2][cName],(long)3);
         }
     }
 }

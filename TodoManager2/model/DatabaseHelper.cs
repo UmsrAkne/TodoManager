@@ -72,7 +72,10 @@ namespace TodoManager2.model {
             columnNamePart += ")";
 
             var valuePart = "VALUES (";
-            new List<String>(values).ForEach(v => valuePart += "'" + v + "', ");
+            new List<String>(values).ForEach(v => {
+                if (long.TryParse(v, out long _)) valuePart += " " + v + ", ";
+                else valuePart += "'" + v + "', ";
+            });
             valuePart = valuePart.Substring(0, valuePart.Length - 2);
             valuePart += ");";
 
