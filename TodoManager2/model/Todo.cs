@@ -54,5 +54,15 @@ namespace TodoManager2.model {
 
         public TimeSpan Span { get; set; } = new TimeSpan();
 
+        public List<String> Tags { get; set; } = new List<string>();
+
+        public string Priority { get; set; } = "D";
+
+        /// <summary>
+        /// データベースに定義されているプライマリーキーのIDと同じ値です。
+        /// 新規でオブジェクトを作成した場合のデフォルトは０になっています。
+        /// </summary>
+        public int ID { get; set; } = 0;
+
     }
 }
