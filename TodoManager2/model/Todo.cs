@@ -30,13 +30,14 @@ namespace TodoManager2.model {
 
         public string Title { get; set; }
 
+        private bool isCompleted = false;
         public bool IsCompleted {
             get {
-                return IsCompleted;
+                return isCompleted;
             }
             set {
-                IsCompleted = value;
-                if (IsCompleted) {
+                isCompleted = value;
+                if (isCompleted) {
                     if (CompletionDateTime == DateTime.MinValue) {
                         CompletionDateTime = DateTime.Now;
                     }
