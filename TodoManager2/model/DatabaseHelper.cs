@@ -100,5 +100,16 @@ namespace TodoManager2.model {
             executeNonQuery(commandText);
         }
 
+        /// <summary>
+        /// 指定テーブル、指定列内の最大値を取得します
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
+        public long getMaxInColumn(string tableName, string columnName) {
+            var commandText = "SELECT MAX("+ columnName +") FROM " + tableName;
+            var dics = select(commandText);
+            return (long)dics[0]["MAX(" + columnName + ")"];
+        }
+
     }
 }

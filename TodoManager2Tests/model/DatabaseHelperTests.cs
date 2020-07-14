@@ -64,5 +64,21 @@ namespace TodoManager2.model.Tests {
         public void cleanup() {
             System.IO.File.Delete(dbName + ".sqlite");
         }
+
+        [TestMethod()]
+        public void getMaxInColumnTest() {
+            var dbh = new DatabaseHelper(dbName);
+
+            string[] columnNames = { "id" };
+            string[] val0 = { "0" };
+            string[] val1 = { "1" };
+            string[] val2 = { "2" };
+
+            dbh.insert("todos", columnNames, val0);
+            dbh.insert("todos", columnNames, val1);
+            dbh.insert("todos", columnNames, val2);
+
+            Assert.AreEqual(dbh.getMaxInColumn("todos", "id"), 2);
+        }
     }
 }
