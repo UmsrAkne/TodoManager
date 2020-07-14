@@ -12,11 +12,11 @@ namespace TodoManager2.model {
 
         }
 
-        public Todo(DateTime creationDate) {
+        public Todo(DateTime creationDate, int uniqueID) {
             CreationDateTime = creationDate;
         }
 
-        public Todo(DateTime creationDate, DateTime completionDate) : this(creationDate) {
+        public Todo(DateTime creationDate, DateTime completionDate, int uniqueID) : this(creationDate, uniqueID) {
             CompletionDateTime = completionDate;
         }
 
