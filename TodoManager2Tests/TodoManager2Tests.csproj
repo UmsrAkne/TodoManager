@@ -60,6 +60,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="model\DatabaseHelperTests.cs" />
+    <Compile Include="model\TodoReaderWriterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
