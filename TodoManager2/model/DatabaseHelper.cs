@@ -111,5 +111,16 @@ namespace TodoManager2.model {
             return (long)dics[0]["MAX(" + columnName + ")"];
         }
 
+        /// <summary>
+        /// 指定したテーブルに入っている総レコード数を取得します
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
+        public long getRecordCount(string tableName) {
+            var commandText = "SELECT id FROM " + tableName;
+            var dics = select(commandText);
+            return dics.Count;
+        }
+
     }
 }

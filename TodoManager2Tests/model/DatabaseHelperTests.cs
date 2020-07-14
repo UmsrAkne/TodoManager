@@ -80,5 +80,14 @@ namespace TodoManager2.model.Tests {
 
             Assert.AreEqual(dbh.getMaxInColumn("todos", "id"), 2);
         }
+
+        [TestMethod()]
+        public void getRecordCountTest() {
+            var dbh = new DatabaseHelper(dbName);
+            Assert.AreEqual(dbh.getRecordCount("todos"), 0);
+
+            dbh.insert("todos", new string[] { "id" }, new string[] { "1" });
+            Assert.AreEqual(dbh.getRecordCount("todos"), 1);
+        }
     }
 }
