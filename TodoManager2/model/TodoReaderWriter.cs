@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// このクラスでは Todo オブジェクトをデータベースに書き込んだり、List として取り出したりする機能を提供します。
@@ -48,6 +49,44 @@ namespace TodoManager2.model {
             };
 
             dbHelper.insert(TABLE_NAME_TODOS, columnNames, values);
+        }
+
+        public Todo getTodo(int id) {
+            var commandText = "SELECT * FROM " + TABLE_NAME_TODOS + " WHERE id = " + id;
+            var dics = dbHelper.select(commandText);
+
+            if (dics.Count == 0) {
+                throw new ArgumentException("引数に指定されたIDに該当するレコードがありませんでした");
+            }
+            Dictionary<string ,object> todoDictionary = dics[0];
+
+            return toTodo(todoDictionary);
+        }
+
+        /// <summary>
+        /// データベースから取得してきたディクショナリーを元に Todo を生成します。
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        private Todo toTodo(Dictionary<string, object> todoDictionary) {
+
+            var creationDate = DateTime.Parse((string)todoDictionary[nameof(Todo.CreationDateTime)]);
+            var completionDate = DateTime.Parse((string)todoDictionary[nameof(Todo.CompletionDateTime)]);
+            var dueDate= DateTime.Parse((string)todoDictionary[nameof(Todo.DueDateTime)]);
+            var uid = (long)todoDictionary["id"];
+            var todo = new Todo(creationDate, completionDate, uid);
+
+            todo.DueDateTime = dueDate;
+            todo.Text = (string)todoDictionary[nameof(Todo.Text)];
+            todo.Title = (string)todoDictionary[nameof(Todo.Title)];
+            todo.Priority = (string)todoDictionary[nameof(Todo.Priority)];
+            todo.CompletionComment = (string)todoDictionary[nameof(Todo.CompletionComment)];
+
+            if(completionDate.CompareTo(new DateTime()) != 0) {
+                todo.IsCompleted = true;
+            }
+
+            return todo;
         }
     }
 }

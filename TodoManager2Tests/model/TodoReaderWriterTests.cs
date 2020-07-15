@@ -33,10 +33,26 @@ namespace TodoManager2.model.Tests {
 
         }
 
+        [TestMethod()]
+        public void getTodoTest() {
+            var todoReaderWriter = new TodoReaderWriter(getDatabaseHelper());
+
+            var todo1 = new Todo();
+            todo1.IsCompleted = true;
+            todo1.Title = "testTitle";
+            todo1.Text = "testText";
+
+            todoReaderWriter.add(todo1);
+            var todo = todoReaderWriter.getTodo(0);
+
+            Assert.AreEqual(todo1.Title, "testTitle");
+            Assert.AreEqual(todo1.Text, "testText");
+            Assert.AreEqual(todo1.ID, 0);
+        }
+
         [TestCleanup()]
         public void cleanup() {
             System.IO.File.Delete("testDB" + ".sqlite");
         }
-
     }
 }
