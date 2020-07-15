@@ -43,7 +43,7 @@ namespace TodoManager2.model {
             executeNonQuery(addColumnCommandText);
         }
 
-        private void executeNonQuery(string commandText) {
+        public void executeNonQuery(string commandText) {
             using (var conn = new SQLiteConnection("Data Source=" + DatabaseName + ".sqlite")) {
                 conn.Open();
                 using(var command = conn.CreateCommand()) {
