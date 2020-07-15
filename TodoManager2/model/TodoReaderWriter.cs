@@ -39,7 +39,7 @@ namespace TodoManager2.model {
             string[] values = {
                 newID.ToString(),
                 todo.Title,
-                todo.Title,
+                todo.Text,
                 todo.CreationDateTime.ToString(),
                 todo.CompletionDateTime.ToString(),
                 todo.DueDateTime.ToString(),
