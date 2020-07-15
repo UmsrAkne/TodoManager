@@ -14,6 +14,7 @@ namespace TodoManager2.model {
 
         public Todo(DateTime creationDate, long uniqueID) {
             CreationDateTime = creationDate;
+            ID = uniqueID;
         }
 
         public Todo(DateTime creationDate, DateTime completionDate, long uniqueID) : this(creationDate, uniqueID) {
