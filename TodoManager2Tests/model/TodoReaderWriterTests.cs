@@ -61,12 +61,29 @@ namespace TodoManager2.model.Tests {
             var todoReaderWriter = new TodoReaderWriter(getDatabaseHelper());
 
             Todo[] todos = { new Todo(), new Todo(), new Todo() };
-            List<Todo> testTodoList = new List<Todo>(new Todo[] { new Todo(), new Todo(), new Todo(), new Todo()});
+            List<Todo> testTodoList = new List<Todo>(new Todo[] { new Todo(), new Todo(), new Todo(), new Todo() });
             testTodoList[3].IsCompleted = true;
 
             testTodoList.ForEach(t => todoReaderWriter.add(t));
             List<Todo> resultTodoList = todoReaderWriter.getIncompleteTodos();
             Assert.AreEqual(resultTodoList.Count, 3);
+        }
+
+        [TestMethod()]
+        public void getTodosWithinTest() {
+            cleanup();
+            var todoReaderWriter = new TodoReaderWriter(getDatabaseHelper());
+
+            List<Todo> testTodoList = new List<Todo>();
+            testTodoList.Add(new Todo(DateTime.Now, 1));
+            testTodoList.Add(new Todo(DateTime.Now, 2));
+            testTodoList.Add(new Todo(new DateTime(DateTime.Now.Ticks + (100 * 10000 * 10)), 3));
+            testTodoList.Add(new Todo(new DateTime(DateTime.Now.Ticks - (100 * 10000 * 30)), 4));
+
+            testTodoList.ForEach(t => todoReaderWriter.add(t));
+            List<Todo> resultTodoList = todoReaderWriter.getTodosWithin(new DateTime(DateTime.Now.Ticks - 100 * 10000 * 10), DateTime.Now);
+            Assert.AreEqual(resultTodoList.Count, 2);
+
         }
     }
 }

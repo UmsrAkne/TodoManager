@@ -79,6 +79,27 @@ namespace TodoManager2.model {
         }
 
         /// <summary>
+        /// パラメーターで指定した期間内に作成したTodoをリストで取得します。
+        /// </summary>
+        /// <param name="minDate">ここで指定した日時以降のTodoを取得します</param>
+        /// <param name="maxDate">ここで指定した日時以前のTodoを取得します</param>
+        /// <returns></returns>
+        public List<Todo> getTodosWithin(DateTime minDate, DateTime maxDate) {
+            var commandText = "SELECT * FROM " + TABLE_NAME_TODOS + " "
+                            + "WHERE " + nameof(Todo.CreationDateTime).ToString() + " >= '" + minDate.ToString() + "' "
+                            + "AND " + nameof(Todo.CreationDateTime).ToString() + " <= '" + maxDate.ToString() + "';";
+
+            var dics = dbHelper.select(commandText);
+            if (dics.Count == 0) {
+                return new List<Todo>();
+            }
+
+            List<Todo> todos = new List<Todo>();
+            dics.ForEach(d => todos.Add(toTodo(d)));
+            return todos;
+        }
+
+        /// <summary>
         /// データベースから取得してきたディクショナリーを元に Todo を生成します。
         /// </summary>
         /// <param name=""></param>
