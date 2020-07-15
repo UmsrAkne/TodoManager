@@ -54,5 +54,19 @@ namespace TodoManager2.model.Tests {
         public void cleanup() {
             System.IO.File.Delete("testDB" + ".sqlite");
         }
+
+        [TestMethod()]
+        public void getIncompleteTodosTest() {
+            cleanup();
+            var todoReaderWriter = new TodoReaderWriter(getDatabaseHelper());
+
+            Todo[] todos = { new Todo(), new Todo(), new Todo() };
+            List<Todo> testTodoList = new List<Todo>(new Todo[] { new Todo(), new Todo(), new Todo(), new Todo()});
+            testTodoList[3].IsCompleted = true;
+
+            testTodoList.ForEach(t => todoReaderWriter.add(t));
+            List<Todo> resultTodoList = todoReaderWriter.getIncompleteTodos();
+            Assert.AreEqual(resultTodoList.Count, 3);
+        }
     }
 }

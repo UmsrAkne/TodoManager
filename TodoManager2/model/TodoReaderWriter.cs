@@ -63,6 +63,21 @@ namespace TodoManager2.model {
             return toTodo(todoDictionary);
         }
 
+        public List<Todo> getIncompleteTodos() {
+            var commandText = "SELECT * FROM " + TABLE_NAME_TODOS + " " 
+                            + "WHERE " + nameof(Todo.IsCompleted) + " = 'False'";
+
+            var dics = dbHelper.select(commandText);
+            if (dics.Count == 0) {
+                return new List<Todo>();
+            }
+
+            List<Todo> todos = new List<Todo>();
+            dics.ForEach(d => todos.Add(toTodo(d)));
+
+            return todos;
+        }
+
         /// <summary>
         /// データベースから取得してきたディクショナリーを元に Todo を生成します。
         /// </summary>
