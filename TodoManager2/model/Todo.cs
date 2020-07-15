@@ -12,11 +12,11 @@ namespace TodoManager2.model {
 
         }
 
-        public Todo(DateTime creationDate, int uniqueID) {
+        public Todo(DateTime creationDate, long uniqueID) {
             CreationDateTime = creationDate;
         }
 
-        public Todo(DateTime creationDate, DateTime completionDate, int uniqueID) : this(creationDate, uniqueID) {
+        public Todo(DateTime creationDate, DateTime completionDate, long uniqueID) : this(creationDate, uniqueID) {
             CompletionDateTime = completionDate;
         }
 
@@ -63,7 +63,7 @@ namespace TodoManager2.model {
         /// データベースに定義されているプライマリーキーのIDと同じ値です。
         /// 新規でオブジェクトを作成した場合のデフォルトは０になっています。
         /// </summary>
-        public int ID { get; set; } = 0;
+        public long ID { get; set; } = 0;
 
     }
 }
