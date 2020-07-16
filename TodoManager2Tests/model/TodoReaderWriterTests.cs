@@ -47,9 +47,9 @@ namespace TodoManager2.model.Tests {
             todoReaderWriter.add(todo1);
             var todo = todoReaderWriter.getTodo(0);
 
-            Assert.AreEqual(todo1.Title, "testTitle");
-            Assert.AreEqual(todo1.Text, "testText");
-            Assert.AreEqual(todo1.ID, 0);
+            Assert.AreEqual(todo.Title, "testTitle");
+            Assert.AreEqual(todo.Text, "testText");
+            Assert.AreEqual(todo.ID, 0);
             Assert.AreEqual(todo.WorkSpan, new TimeSpan(0, 10, 0));
         }
 
