@@ -7,10 +7,25 @@ using System.Collections.Generic;
 
 namespace TodoManager2.model {
 
+    public enum TagsTableColumnName{
+        id,
+        name
+    }
+
+    public enum TagMapsTableColumnName{
+        id,
+        tag_id,
+        todo_id
+    }
+
     public class TodoReaderWriter {
 
         private DatabaseHelper dbHelper;
         private readonly string TABLE_NAME_TODOS = "todos";
+
+        public readonly string tagsTableName = "tags";
+        public readonly string tagMapsTableName = "tag_maps";
+
 
         public TodoReaderWriter(DatabaseHelper dbHelper) {
             this.dbHelper = dbHelper;
@@ -185,13 +200,19 @@ namespace TodoManager2.model {
         }
 
         public List<Todo> getTodoFromTag(string tag) {
+            string tagIDColName = TagMapsTableColumnName.tag_id.ToString();
+            string todoIDColName = TagMapsTableColumnName.todo_id.ToString();
+
             var commandText = "WITH t1 AS"
                             + "(" + " " 
-                            +   "SELECT tag_id, todo_id FROM tag_maps" + " "
-                            +   "WHERE tag_id = (SELECT id FROM tags WHERE name = '" + tag + "')"
+                            +   "SELECT " + tagIDColName + ", " + todoIDColName + " "
+                            +   "FROM " + tagMapsTableName + " "
+                            +   "WHERE " + tagIDColName + " = ("
+                            +   "SELECT id FROM " + tagsTableName + " WHERE " + TagsTableColumnName.name + " = '" + tag + "')"
                             + ")" + " "
                             + "SELECT * FROM t1" + " "
-                            + "INNER JOIN todos ON t1.todo_id = todos.id;"; 
+                            + "INNER JOIN " + TABLE_NAME_TODOS + " ON "
+                            + "t1." + todoIDColName + " = " + TABLE_NAME_TODOS + ".id;"; 
 
             var dic = dbHelper.select(commandText);
             List<Todo> todos = new List<Todo>();
