@@ -219,5 +219,22 @@ namespace TodoManager2.model {
             dic.ForEach(d => { todos.Add(toTodo(d)); });
             return todos;
         }
+
+        public void attachTag(long todoID, long tagID) {
+            var searchDuplicateCommand = "SELECT id FROM " + tagMapsTableName + " "
+                                       + "WHERE " + TagMapsTableColumnName.tag_id.ToString() + " = " + tagID.ToString() + " "
+                                       + "AND " + TagMapsTableColumnName.todo_id + " = " + todoID.ToString() + ";";
+
+            var dics = dbHelper.select(searchDuplicateCommand);
+
+            if(dics.Count > 0) {
+                return;
+            }
+
+            string[] columnNames = {
+                TagMapsTableColumnName.tag_id.ToString(), TagMapsTableColumnName.todo_id.ToString() };
+            string[] values = { tagID.ToString(), todoID.ToString() };
+            dbHelper.insert(tagMapsTableName, columnNames, values);
+        }
     }
 }

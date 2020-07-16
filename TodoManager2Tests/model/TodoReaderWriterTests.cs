@@ -200,5 +200,43 @@ namespace TodoManager2.model.Tests {
             Assert.AreEqual(todoReaderWriter.getTodoFromTag("testTag2").Count, 2);
 
         }
+
+        [TestMethod()]
+        public void attachTagTest() {
+            cleanup();
+            var dbHelper = getDatabaseHelper();
+            var todoReaderWriter = new TodoReaderWriter(dbHelper);
+
+            dbHelper.createTable(todoReaderWriter.tagMapsTableName);
+            dbHelper.addNotNullColumn(todoReaderWriter.tagMapsTableName, TagMapsTableColumnName.tag_id.ToString(), "INTEGER");
+            dbHelper.addNotNullColumn(todoReaderWriter.tagMapsTableName, TagMapsTableColumnName.todo_id.ToString(), "INTEGER");
+
+            todoReaderWriter.attachTag(0, 0);
+            todoReaderWriter.attachTag(0, 1);
+            todoReaderWriter.attachTag(1, 1);
+            todoReaderWriter.attachTag(1, 1);
+
+            // 4回タグの付与を行う。重複を一つ含むため、最終的なレコード数は 3 になる。
+            Assert.AreEqual(dbHelper.getRecordCount(todoReaderWriter.tagMapsTableName), 3);
+
+            dbHelper.createTable(todoReaderWriter.tagsTableName);
+            dbHelper.addNotNullColumn(todoReaderWriter.tagsTableName, TagsTableColumnName.name.ToString(), "TEXT");
+
+            todoReaderWriter.addTag(todoReaderWriter.tagsTableName, TagsTableColumnName.name.ToString(), "tag0");
+            todoReaderWriter.addTag(todoReaderWriter.tagsTableName, TagsTableColumnName.name.ToString(), "tag1");
+
+            Todo[] todos = { new Todo(), new Todo() };
+            todos[0].Title = "todo0title";
+            todos[1].Title = "todo1title";
+
+            todoReaderWriter.add(todos[0]);
+            todoReaderWriter.add(todos[1]);
+
+            Assert.AreEqual(todoReaderWriter.getTodoFromTag("tag0").Count, 1);
+            Assert.AreEqual(todoReaderWriter.getTodoFromTag("tag1").Count, 2);
+            Assert.AreEqual(todoReaderWriter.getTodoFromTag("tag0")[0].Title, "todo0title");
+            Assert.AreEqual(todoReaderWriter.getTodoFromTag("tag1")[0].Title, "todo0title");
+            Assert.AreEqual(todoReaderWriter.getTodoFromTag("tag1")[1].Title, "todo1title");
+        }
     }
 }
