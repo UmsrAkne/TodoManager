@@ -24,6 +24,8 @@ namespace TodoManager2.model {
                 newID = dbHelper.getMaxInColumn(TABLE_NAME_TODOS, "id") + 1;
             }
 
+            newID = Math.Max(newID, todo.ID);
+
             string[] columnNames = {
                 nameof(Todo.ID),
                 nameof(Todo.Title),
