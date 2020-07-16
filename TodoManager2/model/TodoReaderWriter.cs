@@ -36,6 +36,7 @@ namespace TodoManager2.model {
                 nameof(Todo.Priority),
                 nameof(Todo.IsCompleted),
                 nameof(Todo.CompletionComment),
+                nameof(Todo.WorkSpan)
             };
 
             string[] values = {
@@ -47,7 +48,8 @@ namespace TodoManager2.model {
                 todo.DueDateTime.ToString(),
                 todo.Priority,
                 todo.IsCompleted.ToString(),
-                todo.CompletionComment
+                todo.CompletionComment,
+                todo.WorkSpan.Ticks.ToString()
             };
 
             dbHelper.insert(TABLE_NAME_TODOS, columnNames, values);
@@ -119,6 +121,7 @@ namespace TodoManager2.model {
             todo.Title = (string)todoDictionary[nameof(Todo.Title)];
             todo.Priority = (string)todoDictionary[nameof(Todo.Priority)];
             todo.CompletionComment = (string)todoDictionary[nameof(Todo.CompletionComment)];
+            todo.WorkSpan = new TimeSpan((long)todoDictionary[nameof(Todo.WorkSpan)]);
 
             if(completionDate.CompareTo(new DateTime()) != 0) {
                 todo.IsCompleted = true;

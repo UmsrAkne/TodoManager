@@ -28,6 +28,7 @@ namespace TodoManager2.model.Tests {
             dbHelper.addNotNullColumn("todos", nameof(Todo.Priority), "TEXT");
             dbHelper.addNotNullColumn("todos", nameof(Todo.IsCompleted), "TEXT");
             dbHelper.addNotNullColumn("todos", nameof(Todo.CompletionComment), "TEXT");
+            dbHelper.addNotNullColumn("todos", nameof(Todo.WorkSpan), "INTEGER");
 
             return dbHelper;
 
@@ -41,6 +42,7 @@ namespace TodoManager2.model.Tests {
             todo1.IsCompleted = true;
             todo1.Title = "testTitle";
             todo1.Text = "testText";
+            todo1.WorkSpan = new TimeSpan(0, 10, 0);
 
             todoReaderWriter.add(todo1);
             var todo = todoReaderWriter.getTodo(0);
@@ -48,6 +50,7 @@ namespace TodoManager2.model.Tests {
             Assert.AreEqual(todo1.Title, "testTitle");
             Assert.AreEqual(todo1.Text, "testText");
             Assert.AreEqual(todo1.ID, 0);
+            Assert.AreEqual(todo.WorkSpan, new TimeSpan(0, 10, 0));
         }
 
         [TestCleanup()]
