@@ -85,5 +85,34 @@ namespace TodoManager2.model.Tests {
             Assert.AreEqual(resultTodoList.Count, 2);
 
         }
+
+        [TestMethod()]
+        public void updateTest() {
+            cleanup();
+            var todoReaderWriter = new TodoReaderWriter(getDatabaseHelper());
+
+            List<Todo> todoList = new List<Todo>();
+            todoList.Add(new Todo(DateTime.Now, 1));
+            todoList.Add(new Todo(DateTime.Now, 2));
+            todoList.Add(new Todo(DateTime.Now, 3));
+
+            todoList[1].Text = "testText";
+
+            todoList.ForEach(t => todoReaderWriter.add(t));
+
+            var ts = todoReaderWriter.getIncompleteTodos();
+
+            Assert.AreEqual(todoReaderWriter.getTodo(2).Text, "testText");
+
+            var testCreationDate = new DateTime(DateTime.Now.Ticks + 100 * 100 * 100 * 100);
+            var updatedTodo = new Todo(testCreationDate,2);
+            updatedTodo.Text = "updated";
+            updatedTodo.Title = "updateTitle";
+            todoReaderWriter.update(updatedTodo);
+
+            Assert.AreEqual(todoReaderWriter.getTodo(2).Text, "updated");
+            Assert.AreEqual(todoReaderWriter.getTodo(2).Title, "updateTitle");
+            Assert.AreEqual(todoReaderWriter.getTodo(2).CreationDateTime.ToString(), testCreationDate.ToString());
+        }
     }
 }

@@ -126,5 +126,25 @@ namespace TodoManager2.model {
 
             return todo;
         }
+
+        /// <summary>
+        /// パラメーターに入力した Todo と同じ ID のレコードを更新します。
+        /// </summary>
+        /// <param name="updatedTodo"></param>
+        public void update(Todo updatedTodo) {
+            var commandText = "UPDATE " + TABLE_NAME_TODOS + " "
+                            + "SET " 
+                            + nameof(Todo.Text) + " = '" + updatedTodo.Text + "', "
+                            + nameof(Todo.Title) + " = '" + updatedTodo.Title + "', "
+                            + nameof(Todo.Priority) + " = '" + updatedTodo.Priority + "', "
+                            + nameof(Todo.CompletionDateTime) + " = '" + updatedTodo.CompletionDateTime.ToString() + "', "
+                            + nameof(Todo.CompletionComment) + " = '" + updatedTodo.CompletionComment + "', "
+                            + nameof(Todo.IsCompleted) + " = '" + updatedTodo.IsCompleted.ToString() + "', "
+                            + nameof(Todo.CreationDateTime) + " = '" + updatedTodo.CreationDateTime.ToString() + "', "
+                            + nameof(Todo.DueDateTime) + " = '" + updatedTodo.DueDateTime.ToString() + "' "
+                            + "WHERE " + "id = " + updatedTodo.ID.ToString() + ";";
+
+            dbHelper.executeNonQuery(commandText);
+        }
     }
 }
