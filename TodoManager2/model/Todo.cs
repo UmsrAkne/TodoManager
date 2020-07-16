@@ -54,7 +54,7 @@ namespace TodoManager2.model {
 
         public DateTime DueDateTime { get; set; } = new DateTime();
 
-        public TimeSpan Span { get; set; } = new TimeSpan();
+        public TimeSpan WorkSpan { get; set; } = new TimeSpan();
 
         public List<String> Tags { get; set; } = new List<string>();
 
