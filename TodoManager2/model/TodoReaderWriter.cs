@@ -183,5 +183,20 @@ namespace TodoManager2.model {
 
             dbHelper.insert(tagMapTableName, columnNames, values);
         }
+
+        public List<Todo> getTodoFromTag(string tag) {
+            var commandText = "WITH t1 AS"
+                            + "(" + " " 
+                            +   "SELECT tag_id, todo_id FROM tag_maps" + " "
+                            +   "WHERE tag_id = (SELECT id FROM tags WHERE name = '" + tag + "')"
+                            + ")" + " "
+                            + "SELECT * FROM t1" + " "
+                            + "INNER JOIN todos ON t1.todo_id = todos.id;"; 
+
+            var dic = dbHelper.select(commandText);
+            List<Todo> todos = new List<Todo>();
+            dic.ForEach(d => { todos.Add(toTodo(d)); });
+            return todos;
+        }
     }
 }
