@@ -157,8 +157,6 @@ namespace TodoManager2.model {
         public void delete(int id) {
             dbHelper.executeNonQuery("DELETE FROM " + TABLE_NAME_TODOS + " WHERE id = " + id + ";");
         }
-    }
-}
 
         /// <summary>
         /// タグを文字列のリストとして取得します。
@@ -173,3 +171,17 @@ namespace TodoManager2.model {
             dics.ForEach(d => tags.Add((string)d[tagNameColumnName]));
             return tags;
         }
+
+        public void addTag(string tagMapTableName,string tagNameColumnName, string tag) {
+            long tagID = 0;
+            if(dbHelper.getRecordCount(tagMapTableName) > 0) {
+                tagID = dbHelper.getMaxInColumn(tagMapTableName, "id") + 1;
+            }
+
+            string[] columnNames = { "id", tagNameColumnName };
+            string[] values = { tagID.ToString(), tag };
+
+            dbHelper.insert(tagMapTableName, columnNames, values);
+        }
+    }
+}

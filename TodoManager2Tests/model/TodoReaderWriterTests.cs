@@ -137,8 +137,7 @@ namespace TodoManager2.model.Tests {
 
             Assert.AreEqual(dbHelper.getRecordCount("todos"), 0);
         }
-    }
-}
+
         [TestMethod()]
         public void getTagsTest() {
             cleanup();
@@ -150,3 +149,21 @@ namespace TodoManager2.model.Tests {
 
             var tags = todoReaderWriter.getTags("tag_maps", "name");
         }
+
+        [TestMethod()]
+        public void addTagTest() {
+            cleanup();
+            var dbHelper = getDatabaseHelper();
+            var todoReaderWriter = new TodoReaderWriter(dbHelper);
+
+            dbHelper.createTable("tag_maps");
+            dbHelper.addNotNullColumn("tag_maps", "name", "TEXT");
+            todoReaderWriter.addTag("tag_maps", "name", "tag1");
+            todoReaderWriter.addTag("tag_maps", "name", "tag2");
+
+            var tags = todoReaderWriter.getTags("tag_maps", "name");
+            Assert.AreEqual(tags[0], "tag1");
+            Assert.AreEqual(tags[1], "tag2");
+        }
+    }
+}
