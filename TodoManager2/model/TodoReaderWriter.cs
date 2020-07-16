@@ -146,5 +146,13 @@ namespace TodoManager2.model {
 
             dbHelper.executeNonQuery(commandText);
         }
+
+        /// <summary>
+        /// 指定したIDのレコードをデータベースから削除します
+        /// </summary>
+        /// <param name="id"></param>
+        public void delete(int id) {
+            dbHelper.executeNonQuery("DELETE FROM " + TABLE_NAME_TODOS + " WHERE id = " + id + ";");
+        }
     }
 }

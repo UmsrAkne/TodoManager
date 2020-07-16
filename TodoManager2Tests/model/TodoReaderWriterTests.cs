@@ -114,5 +114,25 @@ namespace TodoManager2.model.Tests {
             Assert.AreEqual(todoReaderWriter.getTodo(2).Title, "updateTitle");
             Assert.AreEqual(todoReaderWriter.getTodo(2).CreationDateTime.ToString(), testCreationDate.ToString());
         }
+
+        [TestMethod()]
+        public void deleteTest() {
+            var dbHelper = getDatabaseHelper();
+            var todoReaderWriter = new TodoReaderWriter(dbHelper);
+
+            List<Todo> todoList = new List<Todo>(new Todo[] {  new Todo(), new Todo(), new Todo() });
+            todoList.ForEach(t => todoReaderWriter.add(t));
+            Assert.AreEqual(dbHelper.getRecordCount("todos"), 3);
+
+            todoReaderWriter.delete(1);
+
+            Assert.AreEqual(dbHelper.getRecordCount("todos"), 2);
+
+            todoReaderWriter.delete(0);
+            todoReaderWriter.delete(1);
+            todoReaderWriter.delete(2);
+
+            Assert.AreEqual(dbHelper.getRecordCount("todos"), 0);
+        }
     }
 }
