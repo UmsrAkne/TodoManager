@@ -159,3 +159,17 @@ namespace TodoManager2.model {
         }
     }
 }
+
+        /// <summary>
+        /// タグを文字列のリストとして取得します。
+        /// </summary>
+        /// <param name="tagMaptableName">タグの名前が入っているテーブルの名前を入力します。</param>
+        /// <param name="tagNameColumnName">タグの名前が入っている列名を入力します</param>
+        /// <returns></returns>
+        public List<string> getTags(string tagMaptableName, string tagNameColumnName) {
+            var commandText = "SELECT " + tagNameColumnName + " FROM " + tagMaptableName + ";";
+            var dics = dbHelper.select(commandText);
+            List<String> tags = new List<String>();
+            dics.ForEach(d => tags.Add((string)d[tagNameColumnName]));
+            return tags;
+        }

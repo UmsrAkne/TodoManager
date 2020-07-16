@@ -139,3 +139,14 @@ namespace TodoManager2.model.Tests {
         }
     }
 }
+        [TestMethod()]
+        public void getTagsTest() {
+            cleanup();
+            var dbHelper = getDatabaseHelper();
+            var todoReaderWriter = new TodoReaderWriter(dbHelper);
+
+            dbHelper.createTable("tag_maps");
+            dbHelper.addNotNullColumn("tag_maps", "name", "TEXT");
+
+            var tags = todoReaderWriter.getTags("tag_maps", "name");
+        }
