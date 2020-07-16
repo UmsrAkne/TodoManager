@@ -12,11 +12,12 @@ namespace TodoManager2.model {
 
         }
 
-        public Todo(DateTime creationDate, int uniqueID) {
+        public Todo(DateTime creationDate, long uniqueID) {
             CreationDateTime = creationDate;
+            ID = uniqueID;
         }
 
-        public Todo(DateTime creationDate, DateTime completionDate, int uniqueID) : this(creationDate, uniqueID) {
+        public Todo(DateTime creationDate, DateTime completionDate, long uniqueID) : this(creationDate, uniqueID) {
             CompletionDateTime = completionDate;
         }
 
@@ -30,13 +31,14 @@ namespace TodoManager2.model {
 
         public string Title { get; set; }
 
+        private bool isCompleted = false;
         public bool IsCompleted {
             get {
-                return IsCompleted;
+                return isCompleted;
             }
             set {
-                IsCompleted = value;
-                if (IsCompleted) {
+                isCompleted = value;
+                if (isCompleted) {
                     if (CompletionDateTime == DateTime.MinValue) {
                         CompletionDateTime = DateTime.Now;
                     }
@@ -52,7 +54,7 @@ namespace TodoManager2.model {
 
         public DateTime DueDateTime { get; set; } = new DateTime();
 
-        public TimeSpan Span { get; set; } = new TimeSpan();
+        public TimeSpan WorkSpan { get; set; } = new TimeSpan();
 
         public List<String> Tags { get; set; } = new List<string>();
 
@@ -62,7 +64,7 @@ namespace TodoManager2.model {
         /// データベースに定義されているプライマリーキーのIDと同じ値です。
         /// 新規でオブジェクトを作成した場合のデフォルトは０になっています。
         /// </summary>
-        public int ID { get; set; } = 0;
+        public long ID { get; set; } = 0;
 
     }
 }

@@ -43,7 +43,7 @@ namespace TodoManager2.model {
             executeNonQuery(addColumnCommandText);
         }
 
-        private void executeNonQuery(string commandText) {
+        public void executeNonQuery(string commandText) {
             using (var conn = new SQLiteConnection("Data Source=" + DatabaseName + ".sqlite")) {
                 conn.Open();
                 using(var command = conn.CreateCommand()) {
@@ -98,6 +98,28 @@ namespace TodoManager2.model {
             commandText += columnNamePart + " " + valuePart;
 
             executeNonQuery(commandText);
+        }
+
+        /// <summary>
+        /// 指定テーブル、指定列内の最大値を取得します
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
+        public long getMaxInColumn(string tableName, string columnName) {
+            var commandText = "SELECT MAX("+ columnName +") FROM " + tableName;
+            var dics = select(commandText);
+            return (long)dics[0]["MAX(" + columnName + ")"];
+        }
+
+        /// <summary>
+        /// 指定したテーブルに入っている総レコード数を取得します
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
+        public long getRecordCount(string tableName) {
+            var commandText = "SELECT id FROM " + tableName;
+            var dics = select(commandText);
+            return dics.Count;
         }
 
     }
