@@ -108,7 +108,7 @@ namespace TodoManager2.model.Tests {
             Assert.AreEqual(todoReaderWriter.getTodo(2).Text, "testText");
 
             var testCreationDate = new DateTime(DateTime.Now.Ticks + 100 * 100 * 100 * 100);
-            var updatedTodo = new Todo(testCreationDate,2);
+            var updatedTodo = new Todo(testCreationDate, 2);
             updatedTodo.Text = "updated";
             updatedTodo.Title = "updateTitle";
             todoReaderWriter.update(updatedTodo);
@@ -123,7 +123,7 @@ namespace TodoManager2.model.Tests {
             var dbHelper = getDatabaseHelper();
             var todoReaderWriter = new TodoReaderWriter(dbHelper);
 
-            List<Todo> todoList = new List<Todo>(new Todo[] {  new Todo(), new Todo(), new Todo() });
+            List<Todo> todoList = new List<Todo>(new Todo[] { new Todo(), new Todo(), new Todo() });
             todoList.ForEach(t => todoReaderWriter.add(t));
             Assert.AreEqual(dbHelper.getRecordCount("todos"), 3);
 
