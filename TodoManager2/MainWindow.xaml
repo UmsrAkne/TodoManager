@@ -5,8 +5,106 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TodoManager2"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="900">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="1">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+
+                <TextBlock Text="title"
+                           Margin="0,2,4,2"
+                           Grid.Column="0"
+                           />
+                <TextBox Name="titleInputTextBox"
+                         Margin="0,2,0,2"
+                         Grid.Column="1"
+                         />
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="discription"
+                           Margin="0,0,2,0"
+                           Grid.Column="0"
+                           />
+                <TextBox Name="textInputTextBox"
+                         Grid.Column="1"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         Height="35"
+                         Margin="0,2,0,2"
+                         />
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="work span"
+                           Margin="0,0,4,0"
+                           Grid.Column="0"
+                           />
+                
+                <TextBox Name="workSpanInputTextBox"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         Grid.Column="1"
+                         />
+
+                <TextBlock Text="Priority"
+                           Margin="16,0,4,0"
+                           Grid.Column="2"
+                           />
+
+                <TextBox Name="priorityInputTextBox"
+                         Grid.Column="3"
+                         />
+
+                <StackPanel Orientation="Horizontal"
+                            Grid.Column="4"
+                            Grid.ColumnSpan="2"
+                            HorizontalAlignment="Center"
+                            >
+
+                    <TextBlock Text="Completed"
+                               Margin="0,0,4,0"
+                               Grid.Column="4"
+                               />
+
+                    <CheckBox Grid.Column="5"
+                              Margin="0,2,0,0"
+                              />
+                </StackPanel>
+
+                <Button Content="Add todo"
+                        Grid.Column="6"
+                        Margin="0,0,4,0"
+                        />
+            </Grid>
+
+
+        </StackPanel>
+
     </Grid>
 </Window>
