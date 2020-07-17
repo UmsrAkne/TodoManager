@@ -108,7 +108,7 @@ namespace TodoManager2.model.Tests {
             Assert.AreEqual(todoReaderWriter.getTodo(2).Text, "testText");
 
             var testCreationDate = new DateTime(DateTime.Now.Ticks + 100 * 100 * 100 * 100);
-            var updatedTodo = new Todo(testCreationDate,2);
+            var updatedTodo = new Todo(testCreationDate, 2);
             updatedTodo.Text = "updated";
             updatedTodo.Title = "updateTitle";
             todoReaderWriter.update(updatedTodo);
@@ -123,7 +123,7 @@ namespace TodoManager2.model.Tests {
             var dbHelper = getDatabaseHelper();
             var todoReaderWriter = new TodoReaderWriter(dbHelper);
 
-            List<Todo> todoList = new List<Todo>(new Todo[] {  new Todo(), new Todo(), new Todo() });
+            List<Todo> todoList = new List<Todo>(new Todo[] { new Todo(), new Todo(), new Todo() });
             todoList.ForEach(t => todoReaderWriter.add(t));
             Assert.AreEqual(dbHelper.getRecordCount("todos"), 3);
 
@@ -136,6 +136,156 @@ namespace TodoManager2.model.Tests {
             todoReaderWriter.delete(2);
 
             Assert.AreEqual(dbHelper.getRecordCount("todos"), 0);
+        }
+
+        [TestMethod()]
+        public void getTagsTest() {
+            cleanup();
+            var dbHelper = getDatabaseHelper();
+            var todoReaderWriter = new TodoReaderWriter(dbHelper);
+
+            dbHelper.createTable("tag_maps");
+            dbHelper.addNotNullColumn("tag_maps", "name", "TEXT");
+
+            var tags = todoReaderWriter.getTags("tag_maps", "name");
+        }
+
+        [TestMethod()]
+        public void addTagTest() {
+            cleanup();
+            var dbHelper = getDatabaseHelper();
+            var todoReaderWriter = new TodoReaderWriter(dbHelper);
+
+            dbHelper.createTable("tag_maps");
+            dbHelper.addNotNullColumn("tag_maps", "name", "TEXT");
+            todoReaderWriter.addTag("tag_maps", "name", "tag1");
+            todoReaderWriter.addTag("tag_maps", "name", "tag2");
+
+            var tags = todoReaderWriter.getTags("tag_maps", "name");
+            Assert.AreEqual(tags[0], "tag1");
+            Assert.AreEqual(tags[1], "tag2");
+        }
+
+        [TestMethod()]
+        public void getTodoFromTagTest() {
+            cleanup();
+            var dbHelper = getDatabaseHelper();
+            var todoReaderWriter = new TodoReaderWriter(dbHelper);
+
+            dbHelper.createTable("tags");
+            dbHelper.addNotNullColumn("tags", "name", "TEXT");
+            todoReaderWriter.addTag("tags", "name", "testTag1");
+            todoReaderWriter.addTag("tags", "name", "testTag2");
+
+            dbHelper.createTable("tag_maps");
+            dbHelper.addNotNullColumn("tag_maps", "todo_id", "INTEGER");
+            dbHelper.addNotNullColumn("tag_maps", "tag_id", "INTEGER");
+
+            string[] tagMapColumnNames = { "todo_id", "tag_id" };
+            string[] tagMapValues1 = { "0", "0" };
+            string[] tagMapValues2 = { "0", "1" };
+            string[] tagMapValues3 = { "1", "1" };
+
+            dbHelper.insert("tag_maps", tagMapColumnNames, tagMapValues1);
+            dbHelper.insert("tag_maps", tagMapColumnNames, tagMapValues2);
+            dbHelper.insert("tag_maps", tagMapColumnNames, tagMapValues3);
+
+            Todo[] testTodos = { new Todo(), new Todo() };
+            testTodos[0].Title = "testTodo0のタイトル";
+            testTodos[1].Title = "testTodo1のタイトル";
+            todoReaderWriter.add(testTodos[0]);
+            todoReaderWriter.add(testTodos[1]);
+
+            Assert.AreEqual(todoReaderWriter.getTodoFromTag("testTag1").Count, 1);
+            Assert.AreEqual(todoReaderWriter.getTodoFromTag("testTag2").Count, 2);
+
+        }
+
+        [TestMethod()]
+        public void attachTagTest() {
+            cleanup();
+            var dbHelper = getDatabaseHelper();
+            var todoReaderWriter = new TodoReaderWriter(dbHelper);
+
+            dbHelper.createTable(todoReaderWriter.tagMapsTableName);
+            dbHelper.addNotNullColumn(todoReaderWriter.tagMapsTableName, TagMapsTableColumnName.tag_id.ToString(), "INTEGER");
+            dbHelper.addNotNullColumn(todoReaderWriter.tagMapsTableName, TagMapsTableColumnName.todo_id.ToString(), "INTEGER");
+
+            todoReaderWriter.attachTag(0, 0);
+            todoReaderWriter.attachTag(0, 1);
+            todoReaderWriter.attachTag(1, 1);
+            todoReaderWriter.attachTag(1, 1);
+
+            // 4回タグの付与を行う。重複を一つ含むため、最終的なレコード数は 3 になる。
+            Assert.AreEqual(dbHelper.getRecordCount(todoReaderWriter.tagMapsTableName), 3);
+
+            dbHelper.createTable(todoReaderWriter.tagsTableName);
+            dbHelper.addNotNullColumn(todoReaderWriter.tagsTableName, TagsTableColumnName.name.ToString(), "TEXT");
+
+            todoReaderWriter.addTag(todoReaderWriter.tagsTableName, TagsTableColumnName.name.ToString(), "tag0");
+            todoReaderWriter.addTag(todoReaderWriter.tagsTableName, TagsTableColumnName.name.ToString(), "tag1");
+
+            Todo[] todos = { new Todo(), new Todo() };
+            todos[0].Title = "todo0title";
+            todos[1].Title = "todo1title";
+
+            todoReaderWriter.add(todos[0]);
+            todoReaderWriter.add(todos[1]);
+
+            Assert.AreEqual(todoReaderWriter.getTodoFromTag("tag0").Count, 1);
+            Assert.AreEqual(todoReaderWriter.getTodoFromTag("tag1").Count, 2);
+            Assert.AreEqual(todoReaderWriter.getTodoFromTag("tag0")[0].Title, "todo0title");
+            Assert.AreEqual(todoReaderWriter.getTodoFromTag("tag1")[0].Title, "todo0title");
+            Assert.AreEqual(todoReaderWriter.getTodoFromTag("tag1")[1].Title, "todo1title");
+        }
+
+        [TestMethod()]
+        public void detachTagTest() {
+            cleanup();
+            var dbHelper = getDatabaseHelper();
+            var todoReaderWriter = new TodoReaderWriter(dbHelper);
+
+            dbHelper.createTable(todoReaderWriter.tagMapsTableName);
+            dbHelper.addNotNullColumn(todoReaderWriter.tagMapsTableName, TagMapsTableColumnName.tag_id.ToString(), "INTEGER");
+            dbHelper.addNotNullColumn(todoReaderWriter.tagMapsTableName, TagMapsTableColumnName.todo_id.ToString(), "INTEGER");
+
+            todoReaderWriter.attachTag(0, 0);
+            todoReaderWriter.attachTag(0, 1);
+            todoReaderWriter.attachTag(1, 2);
+
+            Assert.AreEqual(dbHelper.getRecordCount(todoReaderWriter.tagMapsTableName), 3);
+            todoReaderWriter.detachTag(0, 0);
+            Assert.AreEqual(dbHelper.getRecordCount(todoReaderWriter.tagMapsTableName), 2);
+            todoReaderWriter.detachTag(0, 1);
+            Assert.AreEqual(dbHelper.getRecordCount(todoReaderWriter.tagMapsTableName), 1);
+
+            //  仮に消す対象が存在しなくても正常に処理は終了する。
+            todoReaderWriter.detachTag(0, 1);
+            Assert.AreEqual(dbHelper.getRecordCount(todoReaderWriter.tagMapsTableName), 1);
+
+            var dics = dbHelper.select("select * FROM " + todoReaderWriter.tagMapsTableName)[0];
+            Assert.AreEqual(dics[TagMapsTableColumnName.todo_id.ToString()], (long)1);
+            Assert.AreEqual(dics[TagMapsTableColumnName.tag_id.ToString()], (long)2);
+        }
+
+        [TestMethod()]
+        public void deleteTagTest() {
+            cleanup();
+            var dbHelper = getDatabaseHelper();
+            var todoReaderWriter = new TodoReaderWriter(dbHelper);
+
+            dbHelper.createTable(todoReaderWriter.tagsTableName);
+            dbHelper.addNotNullColumn(todoReaderWriter.tagsTableName, TagsTableColumnName.name.ToString(), "TEXT");
+
+            todoReaderWriter.addTag(todoReaderWriter.tagsTableName, TagsTableColumnName.name.ToString(), "testTag1");
+            todoReaderWriter.addTag(todoReaderWriter.tagsTableName, TagsTableColumnName.name.ToString(), "testTag2");
+            Assert.AreEqual(dbHelper.getRecordCount(todoReaderWriter.tagsTableName), 2);
+
+            todoReaderWriter.deleteTag("testTag1");
+            Assert.AreEqual(dbHelper.getRecordCount(todoReaderWriter.tagsTableName), 1);
+
+            var tags = todoReaderWriter.getTags(todoReaderWriter.tagsTableName, TagsTableColumnName.name.ToString());
+            Assert.AreEqual(tags[0], "testTag2");
         }
     }
 }

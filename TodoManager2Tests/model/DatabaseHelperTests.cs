@@ -89,5 +89,12 @@ namespace TodoManager2.model.Tests {
             dbh.insert("todos", new string[] { "id" }, new string[] { "1" });
             Assert.AreEqual(dbh.getRecordCount("todos"), 1);
         }
+
+        [TestMethod()]
+        public void createTableTest() {
+            var dbh = new DatabaseHelper(dbName);
+            dbh.createTable("tagTable");
+            Assert.AreEqual(dbh.getRecordCount("tagTable"), 0);
+        }
     }
 }

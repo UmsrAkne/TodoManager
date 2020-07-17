@@ -7,10 +7,25 @@ using System.Collections.Generic;
 
 namespace TodoManager2.model {
 
+    public enum TagsTableColumnName{
+        id,
+        name
+    }
+
+    public enum TagMapsTableColumnName{
+        id,
+        tag_id,
+        todo_id
+    }
+
     public class TodoReaderWriter {
 
         private DatabaseHelper dbHelper;
         private readonly string TABLE_NAME_TODOS = "todos";
+
+        public readonly string tagsTableName = "tags";
+        public readonly string tagMapsTableName = "tag_maps";
+
 
         public TodoReaderWriter(DatabaseHelper dbHelper) {
             this.dbHelper = dbHelper;
@@ -156,6 +171,83 @@ namespace TodoManager2.model {
         /// <param name="id"></param>
         public void delete(int id) {
             dbHelper.executeNonQuery("DELETE FROM " + TABLE_NAME_TODOS + " WHERE id = " + id + ";");
+        }
+
+        /// <summary>
+        /// タグを文字列のリストとして取得します。
+        /// </summary>
+        /// <param name="tagMaptableName">タグの名前が入っているテーブルの名前を入力します。</param>
+        /// <param name="tagNameColumnName">タグの名前が入っている列名を入力します</param>
+        /// <returns></returns>
+        public List<string> getTags(string tagMaptableName, string tagNameColumnName) {
+            var commandText = "SELECT " + tagNameColumnName + " FROM " + tagMaptableName + ";";
+            var dics = dbHelper.select(commandText);
+            List<String> tags = new List<String>();
+            dics.ForEach(d => tags.Add((string)d[tagNameColumnName]));
+            return tags;
+        }
+
+        public void addTag(string tagMapTableName,string tagNameColumnName, string tag) {
+            long tagID = 0;
+            if(dbHelper.getRecordCount(tagMapTableName) > 0) {
+                tagID = dbHelper.getMaxInColumn(tagMapTableName, "id") + 1;
+            }
+
+            string[] columnNames = { "id", tagNameColumnName };
+            string[] values = { tagID.ToString(), tag };
+
+            dbHelper.insert(tagMapTableName, columnNames, values);
+        }
+
+        public List<Todo> getTodoFromTag(string tag) {
+            string tagIDColName = TagMapsTableColumnName.tag_id.ToString();
+            string todoIDColName = TagMapsTableColumnName.todo_id.ToString();
+
+            var commandText = "WITH t1 AS"
+                            + "(" + " " 
+                            +   "SELECT " + tagIDColName + ", " + todoIDColName + " "
+                            +   "FROM " + tagMapsTableName + " "
+                            +   "WHERE " + tagIDColName + " = ("
+                            +   "SELECT id FROM " + tagsTableName + " WHERE " + TagsTableColumnName.name + " = '" + tag + "')"
+                            + ")" + " "
+                            + "SELECT * FROM t1" + " "
+                            + "INNER JOIN " + TABLE_NAME_TODOS + " ON "
+                            + "t1." + todoIDColName + " = " + TABLE_NAME_TODOS + ".id;"; 
+
+            var dic = dbHelper.select(commandText);
+            List<Todo> todos = new List<Todo>();
+            dic.ForEach(d => { todos.Add(toTodo(d)); });
+            return todos;
+        }
+
+        public void attachTag(long todoID, long tagID) {
+            var searchDuplicateCommand = "SELECT id FROM " + tagMapsTableName + " "
+                                       + "WHERE " + TagMapsTableColumnName.tag_id.ToString() + " = " + tagID.ToString() + " "
+                                       + "AND " + TagMapsTableColumnName.todo_id + " = " + todoID.ToString() + ";";
+
+            var dics = dbHelper.select(searchDuplicateCommand);
+
+            if(dics.Count > 0) {
+                return;
+            }
+
+            string[] columnNames = {
+                TagMapsTableColumnName.tag_id.ToString(), TagMapsTableColumnName.todo_id.ToString() };
+            string[] values = { tagID.ToString(), todoID.ToString() };
+            dbHelper.insert(tagMapsTableName, columnNames, values);
+        }
+
+        public void detachTag(long todoID, long tagID) {
+            var commandText = "DELETE FROM " + tagMapsTableName + " "
+                            + "WHERE " + TagMapsTableColumnName.todo_id + " = " + todoID.ToString() + " "
+                            + "AND " + TagMapsTableColumnName.tag_id + " = " + tagID.ToString() + ";";
+
+            dbHelper.executeNonQuery(commandText);
+        }
+
+        public void deleteTag(string tag) {
+            var commandText = "DELETE FROM " + tagsTableName + " WHERE " + TagsTableColumnName.name + " = '" + tag + "';";
+            dbHelper.executeNonQuery(commandText);
         }
     }
 }
