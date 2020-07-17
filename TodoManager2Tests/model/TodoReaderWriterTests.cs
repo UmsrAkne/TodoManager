@@ -238,5 +238,35 @@ namespace TodoManager2.model.Tests {
             Assert.AreEqual(todoReaderWriter.getTodoFromTag("tag1")[0].Title, "todo0title");
             Assert.AreEqual(todoReaderWriter.getTodoFromTag("tag1")[1].Title, "todo1title");
         }
+
+        [TestMethod()]
+        public void detachTagTest() {
+            cleanup();
+            var dbHelper = getDatabaseHelper();
+            var todoReaderWriter = new TodoReaderWriter(dbHelper);
+
+            dbHelper.createTable(todoReaderWriter.tagMapsTableName);
+            dbHelper.addNotNullColumn(todoReaderWriter.tagMapsTableName, TagMapsTableColumnName.tag_id.ToString(), "INTEGER");
+            dbHelper.addNotNullColumn(todoReaderWriter.tagMapsTableName, TagMapsTableColumnName.todo_id.ToString(), "INTEGER");
+
+            todoReaderWriter.attachTag(0, 0);
+            todoReaderWriter.attachTag(0, 1);
+            todoReaderWriter.attachTag(1, 2);
+
+            Assert.AreEqual(dbHelper.getRecordCount(todoReaderWriter.tagMapsTableName), 3);
+            todoReaderWriter.detachTag(0, 0);
+            Assert.AreEqual(dbHelper.getRecordCount(todoReaderWriter.tagMapsTableName), 2);
+            todoReaderWriter.detachTag(0, 1);
+            Assert.AreEqual(dbHelper.getRecordCount(todoReaderWriter.tagMapsTableName), 1);
+
+            //  仮に消す対象が存在しなくても正常に処理は終了する。
+            todoReaderWriter.detachTag(0, 1);
+            Assert.AreEqual(dbHelper.getRecordCount(todoReaderWriter.tagMapsTableName), 1);
+
+            var dics = dbHelper.select("select * FROM " + todoReaderWriter.tagMapsTableName)[0];
+            Assert.AreEqual(dics[TagMapsTableColumnName.todo_id.ToString()], (long)1);
+            Assert.AreEqual(dics[TagMapsTableColumnName.tag_id.ToString()], (long)2);
+        }
+
     }
 }

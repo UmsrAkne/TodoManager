@@ -236,5 +236,13 @@ namespace TodoManager2.model {
             string[] values = { tagID.ToString(), todoID.ToString() };
             dbHelper.insert(tagMapsTableName, columnNames, values);
         }
+
+        public void detachTag(long todoID, long tagID) {
+            var commandText = "DELETE FROM " + tagMapsTableName + " "
+                            + "WHERE " + TagMapsTableColumnName.todo_id + " = " + todoID.ToString() + " "
+                            + "AND " + TagMapsTableColumnName.tag_id + " = " + tagID.ToString() + ";";
+
+            dbHelper.executeNonQuery(commandText);
+        }
     }
 }
