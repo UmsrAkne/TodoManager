@@ -268,5 +268,24 @@ namespace TodoManager2.model.Tests {
             Assert.AreEqual(dics[TagMapsTableColumnName.tag_id.ToString()], (long)2);
         }
 
+        [TestMethod()]
+        public void deleteTagTest() {
+            cleanup();
+            var dbHelper = getDatabaseHelper();
+            var todoReaderWriter = new TodoReaderWriter(dbHelper);
+
+            dbHelper.createTable(todoReaderWriter.tagsTableName);
+            dbHelper.addNotNullColumn(todoReaderWriter.tagsTableName, TagsTableColumnName.name.ToString(), "TEXT");
+
+            todoReaderWriter.addTag(todoReaderWriter.tagsTableName, TagsTableColumnName.name.ToString(), "testTag1");
+            todoReaderWriter.addTag(todoReaderWriter.tagsTableName, TagsTableColumnName.name.ToString(), "testTag2");
+            Assert.AreEqual(dbHelper.getRecordCount(todoReaderWriter.tagsTableName), 2);
+
+            todoReaderWriter.deleteTag("testTag1");
+            Assert.AreEqual(dbHelper.getRecordCount(todoReaderWriter.tagsTableName), 1);
+
+            var tags = todoReaderWriter.getTags(todoReaderWriter.tagsTableName, TagsTableColumnName.name.ToString());
+            Assert.AreEqual(tags[0], "testTag2");
+        }
     }
 }

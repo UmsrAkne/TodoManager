@@ -244,5 +244,10 @@ namespace TodoManager2.model {
 
             dbHelper.executeNonQuery(commandText);
         }
+
+        public void deleteTag(string tag) {
+            var commandText = "DELETE FROM " + tagsTableName + " WHERE " + TagsTableColumnName.name + " = '" + tag + "';";
+            dbHelper.executeNonQuery(commandText);
+        }
     }
 }
