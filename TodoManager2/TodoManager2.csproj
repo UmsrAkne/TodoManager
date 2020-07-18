@@ -74,6 +74,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="model\DatabaseHelper.cs" />
     <Compile Include="model\Todo.cs" />
     <Compile Include="model\TodoReaderWriter.cs" />

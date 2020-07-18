@@ -6,6 +6,11 @@
         xmlns:local="clr-namespace:TodoManager2"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="900">
+
+    <Window.DataContext>
+        <local:MainWindowViewModel/>
+    </Window.DataContext>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
