@@ -46,9 +46,10 @@
                            />
                 <TextBox Name="textInputTextBox"
                          Grid.Column="1"
+                         Height="auto"
+                         MaxHeight="60"
                          TextWrapping="Wrap"
                          AcceptsReturn="True"
-                         Height="35"
                          Margin="0,2,0,2"
                          FontSize="14"
                          />
