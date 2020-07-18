@@ -24,10 +24,12 @@
                 <TextBlock Text="title"
                            Margin="0,2,4,2"
                            Grid.Column="0"
+                           FontSize="14"
                            />
                 <TextBox Name="titleInputTextBox"
                          Margin="0,2,0,2"
                          Grid.Column="1"
+                         FontSize="14"
                          />
             </Grid>
 
@@ -40,6 +42,7 @@
                 <TextBlock Text="discription"
                            Margin="0,0,2,0"
                            Grid.Column="0"
+                           FontSize="14"
                            />
                 <TextBox Name="textInputTextBox"
                          Grid.Column="1"
@@ -47,6 +50,7 @@
                          AcceptsReturn="True"
                          Height="35"
                          Margin="0,2,0,2"
+                         FontSize="14"
                          />
             </Grid>
 
@@ -66,26 +70,31 @@
                 <TextBlock Text="work span"
                            Margin="0,0,4,0"
                            Grid.Column="0"
+                           FontSize="14"
                            />
                 
                 <TextBox Name="workSpanInputTextBox"
                          TextWrapping="Wrap"
                          AcceptsReturn="True"
                          Grid.Column="1"
+                         FontSize="14"
                          />
 
                 <TextBlock Text="Priority"
                            Margin="16,0,4,0"
                            Grid.Column="2"
+                           FontSize="14"
                            />
 
                 <TextBox Name="priorityInputTextBox"
                          Grid.Column="3"
+                         FontSize="14"
                          />
 
                 <TextBlock Text="DueDate after"
                            Margin="16,0,4,0"
                            Grid.Column="4"
+                           FontSize="14"
                            />
 
                 <Grid Grid.Column="5">
@@ -95,11 +104,14 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBox Text="0"
-                             Grid.Column="0"/>
+                             Grid.Column="0"
+                             FontSize="14"
+                             />
 
                     <TextBlock Text="day"
                                Grid.Column="1"
                                Margin="4,0,0,0"
+                               FontSize="14"
                                />
                 </Grid>
 
@@ -112,16 +124,19 @@
                     <TextBlock Text="Completed"
                                Margin="0,0,4,0"
                                Grid.Column="6"
+                               FontSize="14"
                                />
 
                     <CheckBox Grid.Column="7"
                               Margin="0,2,0,0"
+                              FontSize="14"
                               />
                 </StackPanel>
 
                 <Button Content="Add todo"
                         Grid.Column="8"
                         Margin="0,0,4,0"
+                        FontSize="14"
                         />
             </Grid>
 
