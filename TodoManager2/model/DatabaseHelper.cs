@@ -30,6 +30,13 @@ namespace TodoManager2.model {
             executeNonQuery(createTableCommandText);
         }
 
+        public bool existColumn(String tableName, String columnName) {
+            var commandText = "PRAGMA table_info('" + tableName + "');";
+            var tableInfo = select(commandText);
+
+            return tableInfo.Any(dic => ((string)dic["name"] == columnName));
+        }
+
         /// <summary>
         /// 指定したテーブルにNotNull制約のついた列を追加します
         /// </summary>
@@ -37,6 +44,10 @@ namespace TodoManager2.model {
         /// <param name="columnName"></param>
         /// <param name="type">列の型を指定します</param>
         public void addNotNullColumn(string tableName, string columnName, string type) {
+            if (existColumn(tableName, columnName)) {
+                return;
+            }
+
             var addColumnCommandText =
                 "ALTER TABLE " + tableName + " ADD COLUMN " + columnName + " " + type + " NOT NULL;";
 

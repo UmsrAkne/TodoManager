@@ -21,8 +21,8 @@ namespace TodoManager2.model {
     public class TodoReaderWriter {
 
         private DatabaseHelper dbHelper;
-        private readonly string TABLE_NAME_TODOS = "todos";
 
+        public readonly string todoTableName = "todos";
         public readonly string tagsTableName = "tags";
         public readonly string tagMapsTableName = "tag_maps";
 
@@ -35,8 +35,8 @@ namespace TodoManager2.model {
 
             long newID = 0;
 
-            if(dbHelper.getRecordCount(TABLE_NAME_TODOS) > 0) {
-                newID = dbHelper.getMaxInColumn(TABLE_NAME_TODOS, "id") + 1;
+            if(dbHelper.getRecordCount(todoTableName) > 0) {
+                newID = dbHelper.getMaxInColumn(todoTableName, "id") + 1;
             }
 
             newID = Math.Max(newID, todo.ID);
@@ -67,11 +67,11 @@ namespace TodoManager2.model {
                 todo.WorkSpan.Ticks.ToString()
             };
 
-            dbHelper.insert(TABLE_NAME_TODOS, columnNames, values);
+            dbHelper.insert(todoTableName, columnNames, values);
         }
 
         public Todo getTodo(int id) {
-            var commandText = "SELECT * FROM " + TABLE_NAME_TODOS + " WHERE id = " + id;
+            var commandText = "SELECT * FROM " + todoTableName + " WHERE id = " + id;
             var dics = dbHelper.select(commandText);
 
             if (dics.Count == 0) {
@@ -83,7 +83,7 @@ namespace TodoManager2.model {
         }
 
         public List<Todo> getIncompleteTodos() {
-            var commandText = "SELECT * FROM " + TABLE_NAME_TODOS + " " 
+            var commandText = "SELECT * FROM " + todoTableName + " " 
                             + "WHERE " + nameof(Todo.IsCompleted) + " = 'False'";
 
             var dics = dbHelper.select(commandText);
@@ -104,7 +104,7 @@ namespace TodoManager2.model {
         /// <param name="maxDate">ここで指定した日時以前のTodoを取得します</param>
         /// <returns></returns>
         public List<Todo> getTodosWithin(DateTime minDate, DateTime maxDate) {
-            var commandText = "SELECT * FROM " + TABLE_NAME_TODOS + " "
+            var commandText = "SELECT * FROM " + todoTableName + " "
                             + "WHERE " + nameof(Todo.CreationDateTime).ToString() + " >= '" + minDate.ToString() + "' "
                             + "AND " + nameof(Todo.CreationDateTime).ToString() + " <= '" + maxDate.ToString() + "';";
 
@@ -150,7 +150,7 @@ namespace TodoManager2.model {
         /// </summary>
         /// <param name="updatedTodo"></param>
         public void update(Todo updatedTodo) {
-            var commandText = "UPDATE " + TABLE_NAME_TODOS + " "
+            var commandText = "UPDATE " + todoTableName + " "
                             + "SET " 
                             + nameof(Todo.Text) + " = '" + updatedTodo.Text + "', "
                             + nameof(Todo.Title) + " = '" + updatedTodo.Title + "', "
@@ -170,7 +170,7 @@ namespace TodoManager2.model {
         /// </summary>
         /// <param name="id"></param>
         public void delete(int id) {
-            dbHelper.executeNonQuery("DELETE FROM " + TABLE_NAME_TODOS + " WHERE id = " + id + ";");
+            dbHelper.executeNonQuery("DELETE FROM " + todoTableName + " WHERE id = " + id + ";");
         }
 
         /// <summary>
@@ -211,8 +211,8 @@ namespace TodoManager2.model {
                             +   "SELECT id FROM " + tagsTableName + " WHERE " + TagsTableColumnName.name + " = '" + tag + "')"
                             + ")" + " "
                             + "SELECT * FROM t1" + " "
-                            + "INNER JOIN " + TABLE_NAME_TODOS + " ON "
-                            + "t1." + todoIDColName + " = " + TABLE_NAME_TODOS + ".id;"; 
+                            + "INNER JOIN " + todoTableName + " ON "
+                            + "t1." + todoIDColName + " = " + todoTableName + ".id;"; 
 
             var dic = dbHelper.select(commandText);
             List<Todo> todos = new List<Todo>();
