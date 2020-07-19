@@ -33,6 +33,7 @@
                            FontSize="14"
                            />
                 <TextBox Name="titleInputTextBox"
+                         Text="{Binding CreatingTodo.Title, UpdateSourceTrigger=PropertyChanged}"
                          Margin="0,2,0,2"
                          Grid.Column="1"
                          FontSize="14"
@@ -51,6 +52,7 @@
                            FontSize="14"
                            />
                 <TextBox Name="textInputTextBox"
+                         Text="{Binding CreatingTodo.Text, UpdateSourceTrigger=PropertyChanged}"
                          Grid.Column="1"
                          Height="auto"
                          MaxHeight="60"
@@ -81,6 +83,7 @@
                            />
                 
                 <TextBox Name="workSpanInputTextBox"
+                         Text="{Binding CreatingTodo.WorkSpanMinutes, UpdateSourceTrigger=PropertyChanged}"
                          TextWrapping="Wrap"
                          AcceptsReturn="True"
                          Grid.Column="1"
@@ -94,6 +97,7 @@
                            />
 
                 <TextBox Name="priorityInputTextBox"
+                         Text="{Binding CreatingTodo.Priority, UpdateSourceTrigger=PropertyChanged}"
                          Grid.Column="3"
                          FontSize="14"
                          />
@@ -110,7 +114,7 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBox Text="0"
+                    <TextBox Text="{Binding CreatingTodo.DueDayNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              Grid.Column="0"
                              FontSize="14"
                              />
@@ -135,6 +139,7 @@
                                />
 
                     <CheckBox Grid.Column="7"
+                              IsChecked="{Binding CreatingTodo.IsCompleted, UpdateSourceTrigger=PropertyChanged}" 
                               Margin="0,2,0,0"
                               FontSize="14"
                               />
