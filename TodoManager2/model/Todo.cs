@@ -52,7 +52,24 @@ namespace TodoManager2.model {
 
         public DateTime CompletionDateTime { get; private set; } = new DateTime();
 
+        private int dueDateTime;
+        public int DueDayNumber {
+            get => dueDateTime;
+            set {
+                DueDateTime = DateTime.Today.AddDays(1 + value) ;
+                dueDateTime = value;
+            }
+        }
         public DateTime DueDateTime { get; set; } = new DateTime();
+
+        private int workSpanMinutes = 0;
+        public int WorkSpanMinutes {
+            get => workSpanMinutes;
+            set {
+                workSpanMinutes = value;
+                WorkSpan = new TimeSpan(0, workSpanMinutes, 0);
+            }
+        }
 
         public TimeSpan WorkSpan { get; set; } = new TimeSpan();
 
