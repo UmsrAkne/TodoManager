@@ -55,7 +55,7 @@ namespace TodoManager2 {
         }
 
         private DelegateCommand addTodoCommand;
-        public DelegateCommandBase AddTodoCommand {
+        public DelegateCommand AddTodoCommand {
             get {
                 return addTodoCommand ?? (addTodoCommand = new DelegateCommand(
                     () => {
