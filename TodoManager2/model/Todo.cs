@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Prism.Mvvm;
 
 namespace TodoManager2.model {
-    public class Todo {
+    public class Todo : BindableBase{
 
         public Todo() {
 
@@ -29,7 +30,14 @@ namespace TodoManager2.model {
             }
         }
 
-        public string Title { get; set; }
+        private string title = "";
+        public string Title {
+            get => title;
+            set {
+                RaisePropertyChanged(nameof(Title));
+                title = value;
+            }
+        }
 
         private bool isCompleted = false;
         public bool IsCompleted {

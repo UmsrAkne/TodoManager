@@ -69,8 +69,11 @@ namespace TodoManager2 {
 
                         todoReaderWriter.add(todo);
                         CreatingTodo = new Todo();
+                    },
+                    () => {
+                        return CreatingTodo.Title != "";
                     }
-                ));
+                ).ObservesProperty(() => CreatingTodo.Title));
             }
         }
     }
