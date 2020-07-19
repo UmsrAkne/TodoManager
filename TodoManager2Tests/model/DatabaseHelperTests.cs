@@ -96,5 +96,14 @@ namespace TodoManager2.model.Tests {
             dbh.createTable("tagTable");
             Assert.AreEqual(dbh.getRecordCount("tagTable"), 0);
         }
+
+        [TestMethod()]
+        public void existColumnTest() {
+            var dbh = new DatabaseHelper(dbName);
+            dbh.createTable("testTable");
+            dbh.addNotNullColumn("testTable","testColumn","TEXT");
+            Assert.AreEqual(dbh.existColumn("testTable", "testColumn"), true);
+            Assert.AreEqual(dbh.existColumn("testTable", "testColumnA"), false);
+        }
     }
 }
