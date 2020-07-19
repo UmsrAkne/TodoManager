@@ -18,7 +18,14 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="1">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Column="1"
+                    Grid.Row="0"
+                    >
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -155,6 +162,40 @@
 
 
         </StackPanel>
+
+        <ListView Grid.Column="1"
+                  Grid.Row="1"
+                  Margin="0,2,2,2"
+                  ItemsSource="{Binding TodoList}"
+                  >
+            <ListView.View>
+
+                <GridView>
+                    <GridViewColumn>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsCompleted}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn DisplayMemberBinding="{Binding CreationDateString}"/>
+
+                    <GridViewColumn>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Title}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn DisplayMemberBinding="{Binding Text}"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding CompletionDateTime}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
 
     </Grid>
 </Window>

@@ -19,6 +19,14 @@ namespace TodoManager2 {
             }
         }
 
+        private List<Todo> todoList = new List<Todo>();
+        public List<Todo> TodoList {
+            get => todoList;
+            set {
+                todoList = value;
+            }
+        }
+
         private readonly string databaseName = "TodoDatabase";
         private DatabaseHelper databaseHelper;
         private TodoReaderWriter todoReaderWriter;
