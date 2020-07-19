@@ -14,6 +14,41 @@ namespace TodoManager2 {
             get; set;
         } = new Todo();
 
+        private readonly string databaseName = "TodoDatabase";
+        private DatabaseHelper databaseHelper;
+        private TodoReaderWriter todoReaderWriter;
+
+        public MainWindowViewModel() {
+            databaseHelper = new DatabaseHelper(databaseName);
+            todoReaderWriter = new TodoReaderWriter(databaseHelper);
+            buildDatabase();
+        }
+
+        private void buildDatabase() {
+            string textType = "TEXT";
+            string todoTableName = todoReaderWriter.todoTableName;
+            databaseHelper.createTable(todoTableName);
+            databaseHelper.addNotNullColumn(todoTableName, nameof(Todo.Title),textType);
+            databaseHelper.addNotNullColumn(todoTableName, nameof(Todo.Text),textType);
+            databaseHelper.addNotNullColumn(todoTableName, nameof(Todo.IsCompleted),textType);
+            databaseHelper.addNotNullColumn(todoTableName, nameof(Todo.Priority),textType);
+            databaseHelper.addNotNullColumn(todoTableName, nameof(Todo.CreationDateTime),textType);
+            databaseHelper.addNotNullColumn(todoTableName, nameof(Todo.DueDateTime),textType);
+            databaseHelper.addNotNullColumn(todoTableName, nameof(Todo.CompletionComment),textType);
+            databaseHelper.addNotNullColumn(todoTableName, nameof(Todo.CompletionDateTime),textType);
+            databaseHelper.addNotNullColumn(todoTableName, nameof(Todo.WorkSpan),textType);
+
+            string tagsTableName = todoReaderWriter.tagsTableName;
+            databaseHelper.createTable(tagsTableName);
+            databaseHelper.addNotNullColumn(tagsTableName, TagsTableColumnName.name.ToString(),textType);
+
+            string integerType = "INTEGER";
+            string tagMapsTableName = todoReaderWriter.tagMapsTableName;
+            databaseHelper.createTable(tagMapsTableName);
+            databaseHelper.addNotNullColumn(tagMapsTableName, TagMapsTableColumnName.tag_id.ToString(),integerType);
+            databaseHelper.addNotNullColumn(tagMapsTableName, TagMapsTableColumnName.todo_id.ToString(),integerType);
+        }
+
         private DelegateCommand addTodoCommand;
         public DelegateCommandBase AddTodoCommand {
             get {
