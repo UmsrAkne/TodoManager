@@ -10,9 +10,14 @@ using TodoManager2.model;
 namespace TodoManager2 {
     class MainWindowViewModel : BindableBase{
 
+        private Todo creatingTodo = new Todo();
         public Todo CreatingTodo {
-            get; set;
-        } = new Todo();
+            get => creatingTodo;
+            private set {
+                creatingTodo = value;
+                RaisePropertyChanged(nameof(CreatingTodo));
+            }
+        }
 
         private readonly string databaseName = "TodoDatabase";
         private DatabaseHelper databaseHelper;
@@ -61,6 +66,9 @@ namespace TodoManager2 {
                         todo.Priority = CreatingTodo.Priority;
                         todo.IsCompleted = CreatingTodo.IsCompleted;
                         todo.DueDayNumber = CreatingTodo.DueDayNumber;
+
+                        todoReaderWriter.add(todo);
+                        CreatingTodo = new Todo();
                     }
                 ));
             }
