@@ -81,7 +81,11 @@ namespace TodoManager2.model {
                 dueDateTime = value;
             }
         }
-        public DateTime DueDateTime { get; set; } = new DateTime();
+
+        public DateTime DueDateTime { get; set; }
+        public String DueDateTimeString {
+            get => DueDateTime.ToString("MM/dd");
+        }
 
         private int workSpanMinutes = 0;
         public int WorkSpanMinutes {

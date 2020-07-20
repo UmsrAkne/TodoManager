@@ -236,7 +236,18 @@
 
                     <GridViewColumn DisplayMemberBinding="{Binding CreationDateString}"/>
 
-                    <GridViewColumn>
+                    <GridViewColumn Header="所要時間">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding WorkSpanMinutes}"/>
+                                    <TextBlock Text=" min"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                            <GridViewColumn>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel>
@@ -270,6 +281,13 @@
                     <GridViewColumn Header="完了日時"
                                     Width="75"
                                     DisplayMemberBinding="{Binding CompletionDateTimeString}"/>
+
+                    <GridViewColumn Header="期限"
+                                    DisplayMemberBinding="{Binding DueDateTimeString}"
+                                    >
+                        
+                    </GridViewColumn>
+                    
                 </GridView>
             </ListView.View>
         </ListView>
