@@ -35,6 +35,8 @@ namespace TodoManager2 {
             databaseHelper = new DatabaseHelper(databaseName);
             todoReaderWriter = new TodoReaderWriter(databaseHelper);
             buildDatabase();
+
+            TodoList = todoReaderWriter.getTodosWithin(DateTime.MinValue, DateTime.Now);
         }
 
         private void buildDatabase() {
