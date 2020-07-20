@@ -136,7 +136,7 @@ namespace TodoManager2.model {
             todo.Title = (string)todoDictionary[nameof(Todo.Title)];
             todo.Priority = (string)todoDictionary[nameof(Todo.Priority)];
             todo.CompletionComment = (string)todoDictionary[nameof(Todo.CompletionComment)];
-            todo.WorkSpan = new TimeSpan((long)todoDictionary[nameof(Todo.WorkSpan)]);
+            todo.WorkSpan = new TimeSpan(long.Parse((string)todoDictionary[nameof(Todo.WorkSpan)]));
 
             if(completionDate.CompareTo(new DateTime()) != 0) {
                 todo.IsCompleted = true;
