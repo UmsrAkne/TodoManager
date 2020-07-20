@@ -267,7 +267,9 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn DisplayMemberBinding="{Binding CompletionDateTime}"/>
+                    <GridViewColumn Header="完了日時"
+                                    Width="75"
+                                    DisplayMemberBinding="{Binding CompletionDateTimeString}"/>
                 </GridView>
             </ListView.View>
         </ListView>

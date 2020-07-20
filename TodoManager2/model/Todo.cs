@@ -58,7 +58,20 @@ namespace TodoManager2.model {
 
         public string CompletionComment { get; set; }
 
-        public DateTime CompletionDateTime { get; private set; } = new DateTime();
+        private DateTime completionDateTime = new DateTime();
+        public DateTime CompletionDateTime {
+            get => completionDateTime;
+            private set {
+                completionDateTime = value;
+                RaisePropertyChanged(nameof(CompletionDateTimeString));
+            }
+        }
+
+        public String CompletionDateTimeString {
+            get {
+                return (CompletionDateTime != DateTime.MinValue) ? CompletionDateTime.ToString("MM/dd HH:mm") : "";
+            }
+        }
 
         private int dueDateTime;
         public int DueDayNumber {
