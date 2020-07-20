@@ -186,12 +186,32 @@
                             <DataTemplate>
                                 <StackPanel>
                                     <TextBlock Text="{Binding Title}"/>
+
+                                    <TextBlock Text="{Binding Text}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListViewItem}, Path=IsSelected}"
+                                                                 Value="True">
+                                                        
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListViewItem}, Path=IsSelected}"
+                                                                 Value="False" >
+                                                        
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn DisplayMemberBinding="{Binding Text}"/>
                     <GridViewColumn DisplayMemberBinding="{Binding CompletionDateTime}"/>
                 </GridView>
             </ListView.View>
