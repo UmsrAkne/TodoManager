@@ -19,6 +19,15 @@ namespace TodoManager2 {
             }
         }
 
+        private List<Todo> todoList = new List<Todo>();
+        public List<Todo> TodoList {
+            get => todoList;
+            set {
+                todoList = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private readonly string databaseName = "TodoDatabase";
         private DatabaseHelper databaseHelper;
         private TodoReaderWriter todoReaderWriter;
@@ -27,6 +36,8 @@ namespace TodoManager2 {
             databaseHelper = new DatabaseHelper(databaseName);
             todoReaderWriter = new TodoReaderWriter(databaseHelper);
             buildDatabase();
+
+            TodoList = todoReaderWriter.getTodosWithin(DateTime.MinValue, DateTime.Now);
         }
 
         private void buildDatabase() {
@@ -69,11 +80,28 @@ namespace TodoManager2 {
 
                         todoReaderWriter.add(todo);
                         CreatingTodo = new Todo();
+                        reloadTodoListCommand.Execute();
                     },
                     () => {
                         return CreatingTodo.Title != "";
                     }
                 ).ObservesProperty(() => CreatingTodo.Title));
+            }
+        }
+
+        private DelegateCommand<Todo> rewriteTodoCommand;
+        public DelegateCommand<Todo> RewriteTodoCommand {
+            get {
+                return rewriteTodoCommand ?? (rewriteTodoCommand = new DelegateCommand<Todo>(
+                    (Todo paramTodo) => todoReaderWriter.update(paramTodo)));
+            }
+        }
+
+        private DelegateCommand reloadTodoListCommand;
+        public DelegateCommand ReloadTodoListCommand {
+            get {
+                return reloadTodoListCommand ?? (reloadTodoListCommand = new DelegateCommand(
+                    () => TodoList = todoReaderWriter.getTodosWithin(DateTime.MinValue, DateTime.Now)));
             }
         }
     }

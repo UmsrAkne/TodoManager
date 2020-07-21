@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TodoManager2"
-        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="900">
 
@@ -12,13 +12,32 @@
         <local:MainWindowViewModel/>
     </Window.DataContext>
 
+    <Window.InputBindings>
+        <KeyBinding Key="F5" Command="{Binding ReloadTodoListCommand}" />
+    </Window.InputBindings>
+
+    <Window.Resources>
+
+        <!--Control colors.-->
+        <Color x:Key="SelectedBackgroundColor">#FFE5EBF9</Color>
+        <Color x:Key="SelectedUnfocusedColor">#FFDDDDDD</Color>
+
+    </Window.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="1">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Column="1"
+                    Grid.Row="0"
+                    >
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -156,5 +175,170 @@
 
         </StackPanel>
 
+        <ListView Grid.Column="1"
+                  Grid.Row="1"
+                  Margin="0,2,2,2"
+                  ItemsSource="{Binding TodoList}"
+                  >
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="VerticalContentAlignment" Value="Top"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            
+                            <ControlTemplate TargetType="ListViewItem">
+                                <Border x:Name="Border"
+                                        Padding="1"
+                                        SnapsToDevicePixels="true"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="Lavender"
+                                        BorderThickness="0,0,0,1"
+                                        >
+                                    
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup x:Name="SelectionStates">
+                                            <VisualState x:Name="Unselected" />
+                                            <VisualState x:Name="Selected">
+                                                <Storyboard>
+                                                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                        Storyboard.TargetProperty="(Panel.Background).  (SolidColorBrush.Color)">
+                                                        <EasingColorKeyFrame KeyTime="0"
+                                                                             Value="{StaticResource SelectedBackgroundColor}" />
+                                                    </ColorAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </VisualState>
+
+                                            <VisualState x:Name="SelectedUnfocused">
+                                                <Storyboard>
+                                                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                                                  Storyboard.TargetProperty="(Panel.Background).  (SolidColorBrush.Color)">
+                                                        <EasingColorKeyFrame KeyTime="0"
+                                                                             Value="{StaticResource SelectedUnfocusedColor}" />
+                                                    </ColorAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+
+                                    <GridViewRowPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                </Border>
+                            </ControlTemplate>
+
+                        </Setter.Value>
+                    </Setter>
+
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsCompleted}" Value="False">
+                            <Setter Property="Background" Value="Honeydew"/>
+                        </DataTrigger>
+
+                        <DataTrigger Binding="{Binding WorkSpanMinutes}" Value="True">
+                            <Setter Property="Background" Value="Transparent"/>
+                        </DataTrigger>
+
+                    </Style.Triggers>
+
+                </Style>
+            </ListView.ItemContainerStyle>
+
+            <ListView.View>
+
+                <GridView>
+                    <GridViewColumn>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsCompleted}"
+                                          Background="Transparent"
+                                          BorderBrush="Gray"
+                                          BorderThickness="0.5"
+                                          >
+                                    <CheckBox.RenderTransform>
+                                        <ScaleTransform ScaleX="1.3" ScaleY="1.2"/>
+                                    </CheckBox.RenderTransform>
+
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Checked">
+                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}
+                                                                          ,Path=DataContext.RewriteTodoCommand}"
+                                                                   CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}
+                                                                                   ,Path=Content}"
+                                                                   />
+                                        </i:EventTrigger>
+
+                                        <i:EventTrigger EventName="Unchecked">
+                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}
+                                                                          ,Path=DataContext.RewriteTodoCommand}"
+                                                                   CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}
+                                                                                   ,Path=Content}"
+                                                                   />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+
+                                </CheckBox>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="作成日"
+                                    DisplayMemberBinding="{Binding CreationDateString}"/>
+
+                    <GridViewColumn Header="所要時間">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding WorkSpanMinutes}"/>
+                                    <TextBlock Text=" min"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                            <GridViewColumn Header="タイトル">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel MinWidth="200">
+                                    <TextBlock Text="{Binding Title}"/>
+
+                                    <TextBlock Text="{Binding Text}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListViewItem}, Path=IsSelected}"
+                                                                 Value="True">
+                                                        
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListViewItem}, Path=IsSelected}"
+                                                                 Value="False" >
+                                                        
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="完了日時"
+                                    Width="75"
+                                    DisplayMemberBinding="{Binding CompletionDateTimeString}"/>
+
+                    <GridViewColumn Header="期限"
+                                    DisplayMemberBinding="{Binding DueDateTimeString}"
+                                    >
+                        
+                    </GridViewColumn>
+                    
+                </GridView>
+            </ListView.View>
+        </ListView>
+
     </Grid>
+
 </Window>
