@@ -24,6 +24,7 @@ namespace TodoManager2 {
             get => todoList;
             set {
                 todoList = value;
+                RaisePropertyChanged();
             }
         }
 
@@ -79,6 +80,7 @@ namespace TodoManager2 {
 
                         todoReaderWriter.add(todo);
                         CreatingTodo = new Todo();
+                        reloadTodoListCommand.Execute();
                     },
                     () => {
                         return CreatingTodo.Title != "";
@@ -92,6 +94,14 @@ namespace TodoManager2 {
             get {
                 return rewriteTodoCommand ?? (rewriteTodoCommand = new DelegateCommand<Todo>(
                     (Todo paramTodo) => todoReaderWriter.update(paramTodo)));
+            }
+        }
+
+        private DelegateCommand reloadTodoListCommand;
+        public DelegateCommand ReloadTodoListCommand {
+            get {
+                return reloadTodoListCommand ?? (reloadTodoListCommand = new DelegateCommand(
+                    () => TodoList = todoReaderWriter.getTodosWithin(DateTime.MinValue, DateTime.Now)));
             }
         }
     }
