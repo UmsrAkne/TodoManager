@@ -185,9 +185,11 @@
                             
                             <ControlTemplate TargetType="ListViewItem">
                                 <Border x:Name="Border"
-                                        Padding="2"
+                                        Padding="1"
                                         SnapsToDevicePixels="true"
                                         Background="{TemplateBinding Background}"
+                                        BorderBrush="Lavender"
+                                        BorderThickness="0,0,0,1"
                                         >
                                     
                                     <VisualStateManager.VisualStateGroups>
@@ -242,7 +244,14 @@
                     <GridViewColumn>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsCompleted}">
+                                <CheckBox IsChecked="{Binding IsCompleted}"
+                                          Background="Transparent"
+                                          BorderBrush="Gray"
+                                          BorderThickness="0.5"
+                                          >
+                                    <CheckBox.RenderTransform>
+                                        <ScaleTransform ScaleX="1.3" ScaleY="1.2"/>
+                                    </CheckBox.RenderTransform>
 
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="Checked">
@@ -267,7 +276,8 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn DisplayMemberBinding="{Binding CreationDateString}"/>
+                    <GridViewColumn Header="作成日"
+                                    DisplayMemberBinding="{Binding CreationDateString}"/>
 
                     <GridViewColumn Header="所要時間">
                         <GridViewColumn.CellTemplate>
@@ -280,10 +290,10 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                            <GridViewColumn>
+                            <GridViewColumn Header="タイトル">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel>
+                                <StackPanel MinWidth="200">
                                     <TextBlock Text="{Binding Title}"/>
 
                                     <TextBlock Text="{Binding Text}">
