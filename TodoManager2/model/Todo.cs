@@ -26,7 +26,7 @@ namespace TodoManager2.model {
 
         public string CreationDateString {
             get {
-                return CreationDateTime.ToString();
+                return CreationDateTime.ToString("yy/MM/dd HH:mm");
             }
         }
 
