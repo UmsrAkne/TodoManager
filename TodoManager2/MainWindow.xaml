@@ -242,7 +242,27 @@
                     <GridViewColumn>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsCompleted}"/>
+                                <CheckBox IsChecked="{Binding IsCompleted}">
+
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Checked">
+                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}
+                                                                          ,Path=DataContext.RewriteTodoCommand}"
+                                                                   CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}
+                                                                                   ,Path=Content}"
+                                                                   />
+                                        </i:EventTrigger>
+
+                                        <i:EventTrigger EventName="Unchecked">
+                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}
+                                                                          ,Path=DataContext.RewriteTodoCommand}"
+                                                                   CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}
+                                                                                   ,Path=Content}"
+                                                                   />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+
+                                </CheckBox>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

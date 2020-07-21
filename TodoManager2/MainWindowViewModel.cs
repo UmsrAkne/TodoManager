@@ -86,5 +86,13 @@ namespace TodoManager2 {
                 ).ObservesProperty(() => CreatingTodo.Title));
             }
         }
+
+        private DelegateCommand<Todo> rewriteTodoCommand;
+        public DelegateCommand<Todo> RewriteTodoCommand {
+            get {
+                return rewriteTodoCommand ?? (rewriteTodoCommand = new DelegateCommand<Todo>(
+                    (Todo paramTodo) => todoReaderWriter.update(paramTodo)));
+            }
+        }
     }
 }
