@@ -187,8 +187,9 @@
                                 <Border x:Name="Border"
                                         Padding="2"
                                         SnapsToDevicePixels="true"
-                                        Background="Transparent">
-
+                                        Background="{TemplateBinding Background}"
+                                        >
+                                    
                                     <VisualStateManager.VisualStateGroups>
                                         <VisualStateGroup x:Name="SelectionStates">
                                             <VisualState x:Name="Unselected" />
@@ -220,6 +221,18 @@
 
                         </Setter.Value>
                     </Setter>
+
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsCompleted}" Value="False">
+                            <Setter Property="Background" Value="Honeydew"/>
+                        </DataTrigger>
+
+                        <DataTrigger Binding="{Binding WorkSpanMinutes}" Value="True">
+                            <Setter Property="Background" Value="Transparent"/>
+                        </DataTrigger>
+
+                    </Style.Triggers>
+
                 </Style>
             </ListView.ItemContainerStyle>
 

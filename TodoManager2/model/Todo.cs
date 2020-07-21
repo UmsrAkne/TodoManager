@@ -51,6 +51,8 @@ namespace TodoManager2.model {
                         CompletionDateTime = DateTime.Now;
                     }
                 }
+
+                RaisePropertyChanged();
             }
         }
 
