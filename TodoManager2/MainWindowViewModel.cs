@@ -61,7 +61,7 @@ namespace TodoManager2 {
             databaseHelper.addNotNullColumn(todoTableName, nameof(Todo.DueDateTime),textType);
             databaseHelper.addNotNullColumn(todoTableName, nameof(Todo.CompletionComment),textType);
             databaseHelper.addNotNullColumn(todoTableName, nameof(Todo.CompletionDateTime),textType);
-            databaseHelper.addNotNullColumn(todoTableName, nameof(Todo.WorkSpan),textType);
+            databaseHelper.addNotNullColumn(todoTableName, nameof(Todo.WorkSpan),"INTEGER");
 
             string tagsTableName = todoReaderWriter.tagsTableName;
             databaseHelper.createTable(tagsTableName);
