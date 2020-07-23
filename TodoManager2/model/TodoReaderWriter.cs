@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 /// このクラスでは Todo オブジェクトをデータベースに書き込んだり、List として取り出したりする機能を提供します。
@@ -199,16 +200,20 @@ namespace TodoManager2.model {
             dbHelper.insert(tagMapTableName, columnNames, values);
         }
 
-        public List<Todo> getTodoFromTag(string tag) {
+        public List<Todo> getTodoFromTag(List<Tag> tagList) {
             string tagIDColName = TagMapsTableColumnName.tag_id.ToString();
             string todoIDColName = TagMapsTableColumnName.todo_id.ToString();
+
+            var tags = "";
+            tagList.ForEach(t => tags += "'" + t.Content + "', " );
+            tags = tags.Substring(0, tags.Length - 2);
 
             var commandText = "WITH t1 AS"
                             + "(" + " " 
                             +   "SELECT " + tagIDColName + ", " + todoIDColName + " "
                             +   "FROM " + tagMapsTableName + " "
-                            +   "WHERE " + tagIDColName + " = ("
-                            +   "SELECT id FROM " + tagsTableName + " WHERE " + TagsTableColumnName.name + " = '" + tag + "')"
+                            +   "WHERE " + tagIDColName + " IN ("
+                            +   "SELECT id FROM " + tagsTableName + " WHERE " + TagsTableColumnName.name + " IN (" + tags + "))"
                             + ")" + " "
                             + "SELECT * FROM t1" + " "
                             + "INNER JOIN " + todoTableName + " ON "

@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 using Prism.Mvvm;
 
 namespace TodoManager2.model {
-    class Tag : BindableBase{
+    public class Tag : BindableBase{
+
+        public Tag(string tagContent) {
+            content = tagContent;
+        }
 
         private string content;
         public string Content {

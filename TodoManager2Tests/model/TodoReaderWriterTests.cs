@@ -196,8 +196,13 @@ namespace TodoManager2.model.Tests {
             todoReaderWriter.add(testTodos[0]);
             todoReaderWriter.add(testTodos[1]);
 
-            Assert.AreEqual(todoReaderWriter.getTodoFromTag("testTag1").Count, 1);
-            Assert.AreEqual(todoReaderWriter.getTodoFromTag("testTag2").Count, 2);
+            var tags1 = new List<Tag>(new Tag[] { new Tag("testTag1") });
+            var tags2 = new List<Tag>(new Tag[] { new Tag("testTag2") });
+            var allTags = new List<Tag>(new Tag[] { new Tag("testTag1"),new Tag("testTag2") });
+
+            Assert.AreEqual(todoReaderWriter.getTodoFromTag(tags1).Count, 1);
+            Assert.AreEqual(todoReaderWriter.getTodoFromTag(tags2).Count, 2);
+            Assert.AreEqual(todoReaderWriter.getTodoFromTag(allTags).Count, 3);
 
         }
 
@@ -232,11 +237,14 @@ namespace TodoManager2.model.Tests {
             todoReaderWriter.add(todos[0]);
             todoReaderWriter.add(todos[1]);
 
-            Assert.AreEqual(todoReaderWriter.getTodoFromTag("tag0").Count, 1);
-            Assert.AreEqual(todoReaderWriter.getTodoFromTag("tag1").Count, 2);
-            Assert.AreEqual(todoReaderWriter.getTodoFromTag("tag0")[0].Title, "todo0title");
-            Assert.AreEqual(todoReaderWriter.getTodoFromTag("tag1")[0].Title, "todo0title");
-            Assert.AreEqual(todoReaderWriter.getTodoFromTag("tag1")[1].Title, "todo1title");
+            List<Tag> tags0 = new List<Tag>(new Tag[] { new Tag("tag0") });
+            List<Tag> tags1 = new List<Tag>(new Tag[] { new Tag("tag1") });
+
+            Assert.AreEqual(todoReaderWriter.getTodoFromTag(tags0).Count, 1);
+            Assert.AreEqual(todoReaderWriter.getTodoFromTag(tags1).Count, 2);
+            Assert.AreEqual(todoReaderWriter.getTodoFromTag(tags0)[0].Title, "todo0title");
+            Assert.AreEqual(todoReaderWriter.getTodoFromTag(tags1)[0].Title, "todo0title");
+            Assert.AreEqual(todoReaderWriter.getTodoFromTag(tags1)[1].Title, "todo1title");
         }
 
         [TestMethod()]
