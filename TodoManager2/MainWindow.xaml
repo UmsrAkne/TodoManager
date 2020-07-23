@@ -35,6 +35,34 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
+        <Grid Grid.Column="0"
+              Grid.RowSpan="2">
+            
+
+            <ListView ItemsSource="{Binding TagList}"
+                      Grid.Column="0"
+                      >
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="tags"
+                                        Width="100"
+                                        DisplayMemberBinding="{Binding Content}"
+                                        />
+
+                        <GridViewColumn Header="check">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsChecked}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+        </Grid>
+
         <StackPanel Grid.Column="1"
                     Grid.Row="0"
                     >

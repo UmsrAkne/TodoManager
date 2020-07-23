@@ -28,6 +28,15 @@ namespace TodoManager2 {
             }
         }
 
+        private List<Tag> tagList = new List<Tag>();
+        public List<Tag> TagList {
+            get => tagList;
+            set {
+                tagList = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private readonly string databaseName = "TodoDatabase";
         private DatabaseHelper databaseHelper;
         private TodoReaderWriter todoReaderWriter;
