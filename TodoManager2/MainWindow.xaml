@@ -45,6 +45,52 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
+                    <TextBlock Text="検索期間指定"
+                               Grid.Column="0"
+                               HorizontalAlignment="Center"
+                               />
+                    <ComboBox Grid.Column="1">
+
+                        <ComboBoxItem Content="今日のタスク"
+                                      HorizontalAlignment="Stretch">
+                            <ComboBoxItem.Tag> 1 </ComboBoxItem.Tag>
+                        </ComboBoxItem>
+
+                        <ComboBoxItem Content="３日前まで"
+                                      HorizontalAlignment="Stretch">
+                            <ComboBoxItem.Tag> 3 </ComboBoxItem.Tag>
+                        </ComboBoxItem>
+
+                        <ComboBoxItem Content="１週間前まで"
+                                      IsSelected="True"
+                                      HorizontalAlignment="Stretch">
+                            <ComboBoxItem.Tag> 7 </ComboBoxItem.Tag>
+                        </ComboBoxItem>
+
+                        <ComboBoxItem Content="１ヶ月前まで"
+                                      HorizontalAlignment="Stretch">
+                            <ComboBoxItem.Tag> 30 </ComboBoxItem.Tag>
+                        </ComboBoxItem>
+
+                        <ComboBoxItem Content="６ヶ月前まで"
+                                      HorizontalAlignment="Stretch">
+                            <ComboBoxItem.Tag> 180 </ComboBoxItem.Tag>
+                        </ComboBoxItem>
+
+                        <ComboBoxItem Content="期間無指定"
+                                      HorizontalAlignment="Stretch">
+                            <ComboBoxItem.Tag> -1 </ComboBoxItem.Tag>
+                        </ComboBoxItem>
+
+                    </ComboBox>
+                </Grid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
                     <TextBlock Text="タグ検索方式"
                                Margin="0,2,0,0"
                                HorizontalAlignment="Center"
