@@ -198,7 +198,7 @@ namespace TodoManager2.model.Tests {
 
             var tags1 = new List<Tag>(new Tag[] { new Tag("testTag1") });
             var tags2 = new List<Tag>(new Tag[] { new Tag("testTag2") });
-            var allTags = new List<Tag>(new Tag[] { new Tag("testTag1"),new Tag("testTag2") });
+            var allTags = new List<Tag>(new Tag[] { new Tag("testTag1"), new Tag("testTag2") });
 
             Assert.AreEqual(todoReaderWriter.getTodoFromTag(tags1).Count, 1);
             Assert.AreEqual(todoReaderWriter.getTodoFromTag(tags2).Count, 2);
@@ -294,6 +294,68 @@ namespace TodoManager2.model.Tests {
 
             var tags = todoReaderWriter.getTags(todoReaderWriter.tagsTableName, TagsTableColumnName.name.ToString());
             Assert.AreEqual(tags[0], "testTag2");
+        }
+
+        [TestMethod()]
+        public void getTodoTest1() {
+            cleanup();
+            var dbHelper = getDatabaseHelper();
+            var todoReaderWriter = new TodoReaderWriter(dbHelper);
+
+            dbHelper.createTable(todoReaderWriter.tagsTableName);
+            dbHelper.addNotNullColumn(todoReaderWriter.tagsTableName, TagsTableColumnName.name.ToString(), "TEXT");
+
+            todoReaderWriter.addTag(todoReaderWriter.tagsTableName, TagsTableColumnName.name.ToString(), "testTag1");
+            todoReaderWriter.addTag(todoReaderWriter.tagsTableName, TagsTableColumnName.name.ToString(), "testTag2");
+
+            dbHelper.createTable(todoReaderWriter.tagMapsTableName);
+            dbHelper.addNotNullColumn(todoReaderWriter.tagMapsTableName, TagMapsTableColumnName.tag_id.ToString(), "INTEGER");
+            dbHelper.addNotNullColumn(todoReaderWriter.tagMapsTableName, TagMapsTableColumnName.todo_id.ToString(), "INTEGER");
+
+            var todos = new List<Todo>(new Todo[] {
+                new Todo(new DateTime(2010,01,01),0), 
+                new Todo(new DateTime(2010,01,01),1), 
+                new Todo(new DateTime(2010,01,01),2), 
+                new Todo(DateTime.Now,3),
+                new Todo(DateTime.Now,4)
+            });
+
+            todos[0].IsCompleted = true;
+            todos[1].IsCompleted = true;
+            todos.ForEach(t => todoReaderWriter.add(t));
+            todoReaderWriter.attachTag(0, 0);
+            todoReaderWriter.attachTag(1, 0);
+            todoReaderWriter.attachTag(1, 1);
+            todoReaderWriter.attachTag(2, 1);
+            todoReaderWriter.attachTag(3, 1);
+
+            var todoSearchOption = new TodoSearchOption();
+            todoSearchOption.TagSearchTypeIsOR = true;
+
+            // タグ指定なしで実行した場合は全todoが返る
+            Assert.AreEqual(todoReaderWriter.getTodo(todoSearchOption).Count,5);
+
+            todoSearchOption.Tags = new List<Tag>(new Tag[] { new Tag("testTag1"), new Tag("testTag2") });
+            var tt = todoReaderWriter.getTodo(todoSearchOption);
+            Assert.AreEqual(todoReaderWriter.getTodo(todoSearchOption).Count,4); // タグがついていないTodoが一つあるので、5 - 1 で 4
+
+            
+            todoSearchOption.Tags = new List<Tag>(new Tag[] { new Tag("testTag1") });
+            Assert.AreEqual(todoReaderWriter.getTodo(todoSearchOption).Count,2); 
+
+            todoSearchOption.Tags = new List<Tag>(new Tag[] { new Tag("testTag2") });
+            todoSearchOption.ShouldSelectComplitionTodo = false;
+            todoSearchOption.SearchStartPoint = new DateTime(2015, 01, 01);
+            Assert.AreEqual(todoReaderWriter.getTodo(todoSearchOption).Count,1);
+
+            todoSearchOption = new TodoSearchOption();
+            todoSearchOption.Tags = new List<Tag>(new Tag[] { new Tag("testTag1"), new Tag("testTag2") });
+            todoSearchOption.TagSearchTypeIsOR = false;
+            Assert.AreEqual(todoReaderWriter.getTodo(todoSearchOption).Count, 1);
+
+            todoSearchOption.TagSearchTypeIsOR = true;
+            todoSearchOption.ResultCountLimit = 2;
+            Assert.AreEqual(todoReaderWriter.getTodo(todoSearchOption).Count, 2);
         }
     }
 }
