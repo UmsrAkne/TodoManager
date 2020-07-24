@@ -116,6 +116,28 @@
                         </ComboBoxItem>
                     </ComboBox>
                 </Grid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="検索数上限"
+                               Grid.Column="0"
+                               HorizontalAlignment="Center"
+                               />
+                    <ComboBox Grid.Column="1">
+
+                        <ComboBoxItem Content="100"
+                                      IsSelected="True"
+                                      HorizontalAlignment="Stretch">
+                            <ComboBoxItem.Tag> 100 </ComboBoxItem.Tag>
+                        </ComboBoxItem>
+
+                    </ComboBox>
+                </Grid>
+
                 <ListView ItemsSource="{Binding TagList}"
                           Grid.Column="0"
                           >
