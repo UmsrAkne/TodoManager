@@ -40,6 +40,7 @@ namespace TodoManager2 {
         private readonly string databaseName = "TodoDatabase";
         private DatabaseHelper databaseHelper;
         private TodoReaderWriter todoReaderWriter;
+        private TodoSearchOption todoSearchOption = new TodoSearchOption();
 
         public MainWindowViewModel() {
             databaseHelper = new DatabaseHelper(databaseName);
@@ -111,6 +112,17 @@ namespace TodoManager2 {
             get {
                 return reloadTodoListCommand ?? (reloadTodoListCommand = new DelegateCommand(
                     () => TodoList = todoReaderWriter.getTodosWithin(DateTime.MinValue, DateTime.Now)));
+            }
+        }
+
+        private DelegateCommand<object> changeTagSearchTypeCommand;
+        public DelegateCommand<object> ChangeTagSearchTypeCommand {
+            get {
+                return changeTagSearchTypeCommand ?? (changeTagSearchTypeCommand = new DelegateCommand<object>(
+                    (object param) => {
+                        todoSearchOption.TagSearchTypeIsOR = (String.Compare((string)param,"OR") == 0) ? true : false;
+                    }
+                ));
             }
         }
     }
