@@ -111,7 +111,10 @@ namespace TodoManager2 {
         public DelegateCommand ReloadTodoListCommand {
             get {
                 return reloadTodoListCommand ?? (reloadTodoListCommand = new DelegateCommand(
-                    () => TodoList = todoReaderWriter.getTodosWithin(DateTime.MinValue, DateTime.Now)));
+                    () => {
+                        TodoList = todoReaderWriter.getTodo(todoSearchOption);
+                    }
+                ));
             }
         }
 
@@ -121,6 +124,7 @@ namespace TodoManager2 {
                 return changeTagSearchTypeCommand ?? (changeTagSearchTypeCommand = new DelegateCommand<object>(
                     (object param) => {
                         todoSearchOption.TagSearchTypeIsOR = (String.Compare((string)param,"OR") == 0) ? true : false;
+                        reloadTodoListCommand.Execute();
                     }
                 ));
             }
@@ -132,6 +136,7 @@ namespace TodoManager2 {
                 return changeResultCountLimit ?? (changeResultCountLimit = new DelegateCommand<object>(
                     (object param) => {
                         todoSearchOption.ResultCountLimit = long.Parse((string)param);
+                        reloadTodoListCommand.Execute();
                     }
                 ));
             }
@@ -143,6 +148,7 @@ namespace TodoManager2 {
                 return changeSearchStartPointCommand ?? (changeSearchStartPointCommand = new DelegateCommand<object>(
                     (object param) => {
                         todoSearchOption.SearchStartPoint = DateTime.Now.AddDays(double.Parse((string)param));
+                        reloadTodoListCommand.Execute();
                     }
                 ));
             }
