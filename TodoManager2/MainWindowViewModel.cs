@@ -125,5 +125,16 @@ namespace TodoManager2 {
                 ));
             }
         }
+
+        private DelegateCommand<object> changeResultCountLimit;
+        public DelegateCommand<object> ChangeResultCountLimit {
+            get {
+                return changeResultCountLimit ?? (changeResultCountLimit = new DelegateCommand<object>(
+                    (object param) => {
+                        todoSearchOption.ResultCountLimit = long.Parse((string)param);
+                    }
+                ));
+            }
+        }
     }
 }

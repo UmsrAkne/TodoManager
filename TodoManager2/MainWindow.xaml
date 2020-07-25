@@ -129,6 +129,15 @@
                                />
                     <ComboBox Grid.Column="1">
 
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding ChangeResultCountLimit}"
+                                                       CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ComboBox},
+                                                       Path=SelectedItem.Tag}"
+                                                       />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
                         <ComboBoxItem Content="100"
                                       IsSelected="True"
                                       HorizontalAlignment="Stretch">
