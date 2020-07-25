@@ -42,6 +42,11 @@ namespace TodoManager2 {
         private TodoReaderWriter todoReaderWriter;
         private TodoSearchOption todoSearchOption = new TodoSearchOption();
 
+        public TodoSearchOption TodoSearchOption {
+            get => todoSearchOption;
+            private set => todoSearchOption = value;
+        }
+
         public MainWindowViewModel() {
             databaseHelper = new DatabaseHelper(databaseName);
             todoReaderWriter = new TodoReaderWriter(databaseHelper);

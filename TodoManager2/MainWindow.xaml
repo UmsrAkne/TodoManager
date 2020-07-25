@@ -163,6 +163,32 @@
                             <ComboBoxItem.Tag> 300 </ComboBoxItem.Tag>
                         </ComboBoxItem>
                     </ComboBox>
+
+                </Grid>
+            
+                <Grid Margin="0,3,0,3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <CheckBox Content="未完了を表示"
+                              Grid.Column="0"
+                              HorizontalAlignment="Center"
+                              IsChecked="{Binding TodoSearchOption.ShouldSelectIncompleteTodo}"
+                              />
+
+                    <Border Background="Black"
+                            Width="1"
+                            Grid.Column="1"
+                            HorizontalAlignment="Left"
+                            Margin="3,0,0,0"
+                            />
+
+                    <CheckBox Content="完了を表示"
+                              Grid.Column="1"
+                              HorizontalAlignment="Center"
+                              IsChecked="{Binding TodoSearchOption.ShouldSelectComplitionTodo}"
+                              />
                 </Grid>
 
                 <ListView ItemsSource="{Binding TagList}"
