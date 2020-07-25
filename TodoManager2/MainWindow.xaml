@@ -132,9 +132,18 @@
                         <ComboBoxItem Content="100"
                                       IsSelected="True"
                                       HorizontalAlignment="Stretch">
-                            <ComboBoxItem.Tag> 100 </ComboBoxItem.Tag>
+                            <ComboBoxItem.Tag>100</ComboBoxItem.Tag>
                         </ComboBoxItem>
 
+                        <ComboBoxItem Content="200"
+                                      HorizontalAlignment="Stretch">
+                            <ComboBoxItem.Tag> 200 </ComboBoxItem.Tag>
+                        </ComboBoxItem>
+
+                        <ComboBoxItem Content="300"
+                                      HorizontalAlignment="Stretch">
+                            <ComboBoxItem.Tag> 300 </ComboBoxItem.Tag>
+                        </ComboBoxItem>
                     </ComboBox>
                 </Grid>
 
