@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 /// このクラスでは Todo オブジェクトをデータベースに書き込んだり、List として取り出したりする機能を提供します。
@@ -136,7 +137,7 @@ namespace TodoManager2.model {
             todo.Title = (string)todoDictionary[nameof(Todo.Title)];
             todo.Priority = (string)todoDictionary[nameof(Todo.Priority)];
             todo.CompletionComment = (string)todoDictionary[nameof(Todo.CompletionComment)];
-            todo.WorkSpan = new TimeSpan(long.Parse((string)todoDictionary[nameof(Todo.WorkSpan)]));
+            todo.WorkSpan = new TimeSpan((long)todoDictionary[nameof(Todo.WorkSpan)]);
 
             if(completionDate.CompareTo(new DateTime()) != 0) {
                 todo.IsCompleted = true;
@@ -199,16 +200,20 @@ namespace TodoManager2.model {
             dbHelper.insert(tagMapTableName, columnNames, values);
         }
 
-        public List<Todo> getTodoFromTag(string tag) {
+        public List<Todo> getTodoFromTag(List<Tag> tagList) {
             string tagIDColName = TagMapsTableColumnName.tag_id.ToString();
             string todoIDColName = TagMapsTableColumnName.todo_id.ToString();
+
+            var tags = "";
+            tagList.ForEach(t => tags += "'" + t.Content + "', " );
+            tags = tags.Substring(0, tags.Length - 2);
 
             var commandText = "WITH t1 AS"
                             + "(" + " " 
                             +   "SELECT " + tagIDColName + ", " + todoIDColName + " "
                             +   "FROM " + tagMapsTableName + " "
-                            +   "WHERE " + tagIDColName + " = ("
-                            +   "SELECT id FROM " + tagsTableName + " WHERE " + TagsTableColumnName.name + " = '" + tag + "')"
+                            +   "WHERE " + tagIDColName + " IN ("
+                            +   "SELECT id FROM " + tagsTableName + " WHERE " + TagsTableColumnName.name + " IN (" + tags + "))"
                             + ")" + " "
                             + "SELECT * FROM t1" + " "
                             + "INNER JOIN " + todoTableName + " ON "
@@ -248,6 +253,72 @@ namespace TodoManager2.model {
         public void deleteTag(string tag) {
             var commandText = "DELETE FROM " + tagsTableName + " WHERE " + TagsTableColumnName.name + " = '" + tag + "';";
             dbHelper.executeNonQuery(commandText);
+        }
+
+        public List<Todo> getTodo(TodoSearchOption searchOption) {
+            string tagIDColName = TagMapsTableColumnName.tag_id.ToString();
+            string todoIDColName = TagMapsTableColumnName.todo_id.ToString();
+
+            var narrowDownTodoTableSQL = "SELECT * FROM " + todoTableName + " WHERE ";
+
+            // 作成日時によってフィルタリング
+            if(searchOption.SearchStartPoint != DateTime.MinValue) {
+                narrowDownTodoTableSQL += nameof(Todo.CreationDateTime) + " > '" + searchOption.SearchStartPoint + "' AND ";
+            }
+
+            // 完了、未完了の Todo をフィルタリング
+            if(searchOption.ShouldSelectComplitionTodo || searchOption.ShouldSelectIncompleteTodo) {
+                narrowDownTodoTableSQL += " (";
+
+                if (searchOption.ShouldSelectComplitionTodo) {
+                    narrowDownTodoTableSQL += nameof(Todo.IsCompleted) + " = 'True'";
+                }
+
+                if (searchOption.ShouldSelectIncompleteTodo) {
+                    if (searchOption.ShouldSelectComplitionTodo) {
+                        narrowDownTodoTableSQL += " OR ";
+                    }
+                    narrowDownTodoTableSQL += nameof(Todo.IsCompleted) + " = 'False'";
+                }
+
+                narrowDownTodoTableSQL += ")";
+            }
+
+            var commandText = "";
+
+            if(searchOption.Tags.Count > 0) {
+                var tags = "";
+                searchOption.Tags.ForEach(t => tags += "'" + t.Content + "', ");
+                tags = tags.Substring(0, tags.Length - 2);
+
+                string groupBy = "GROUP BY " + todoIDColName;
+                if (!searchOption.TagSearchTypeIsOR) {
+                    groupBy += " HAVING COUNT(*) = " + searchOption.Tags.Count + " ";
+                }
+
+                commandText = "WITH t1 AS"
+                                + "(" + " "
+                                + "SELECT " + tagIDColName + ", " + todoIDColName + ", COUNT(*)" + " "
+                                + "FROM " + tagMapsTableName + " "
+                                + "WHERE " + tagIDColName + " IN ("
+                                + "SELECT id FROM " + tagsTableName + " WHERE " + TagsTableColumnName.name + " IN (" + tags + ") "
+                                + ") " + groupBy
+                                + "), t2 AS (" + narrowDownTodoTableSQL + ")"
+                                + "SELECT * FROM t1" + " "
+                                + "INNER JOIN t2 ON "
+                                + "t1." + todoIDColName + " = t2.id "
+                                + "ORDER BY " + nameof(Todo.CreationDateTime) + " "
+                                + "LIMIT " + searchOption.ResultCountLimit + ";";
+            }
+            else {
+                // tag による絞り込みが不要である場合、todoTable の絞り込みのためのsqlをそのままコマンドとして採用する
+                commandText = narrowDownTodoTableSQL + ";";
+            }
+
+            var dic = dbHelper.select(commandText);
+            List<Todo> todos = new List<Todo>();
+            dic.ForEach(d => { todos.Add(toTodo(d)); });
+            return todos;
         }
     }
 }

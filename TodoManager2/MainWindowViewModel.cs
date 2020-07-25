@@ -28,9 +28,24 @@ namespace TodoManager2 {
             }
         }
 
+        private List<Tag> tagList = new List<Tag>();
+        public List<Tag> TagList {
+            get => tagList;
+            set {
+                tagList = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private readonly string databaseName = "TodoDatabase";
         private DatabaseHelper databaseHelper;
         private TodoReaderWriter todoReaderWriter;
+        private TodoSearchOption todoSearchOption = new TodoSearchOption();
+
+        public TodoSearchOption TodoSearchOption {
+            get => todoSearchOption;
+            private set => todoSearchOption = value;
+        }
 
         public MainWindowViewModel() {
             databaseHelper = new DatabaseHelper(databaseName);
@@ -52,7 +67,7 @@ namespace TodoManager2 {
             databaseHelper.addNotNullColumn(todoTableName, nameof(Todo.DueDateTime),textType);
             databaseHelper.addNotNullColumn(todoTableName, nameof(Todo.CompletionComment),textType);
             databaseHelper.addNotNullColumn(todoTableName, nameof(Todo.CompletionDateTime),textType);
-            databaseHelper.addNotNullColumn(todoTableName, nameof(Todo.WorkSpan),textType);
+            databaseHelper.addNotNullColumn(todoTableName, nameof(Todo.WorkSpan),"INTEGER");
 
             string tagsTableName = todoReaderWriter.tagsTableName;
             databaseHelper.createTable(tagsTableName);
@@ -101,7 +116,46 @@ namespace TodoManager2 {
         public DelegateCommand ReloadTodoListCommand {
             get {
                 return reloadTodoListCommand ?? (reloadTodoListCommand = new DelegateCommand(
-                    () => TodoList = todoReaderWriter.getTodosWithin(DateTime.MinValue, DateTime.Now)));
+                    () => {
+                        TodoList = todoReaderWriter.getTodo(todoSearchOption);
+                    }
+                ));
+            }
+        }
+
+        private DelegateCommand<object> changeTagSearchTypeCommand;
+        public DelegateCommand<object> ChangeTagSearchTypeCommand {
+            get {
+                return changeTagSearchTypeCommand ?? (changeTagSearchTypeCommand = new DelegateCommand<object>(
+                    (object param) => {
+                        todoSearchOption.TagSearchTypeIsOR = (String.Compare((string)param,"OR") == 0) ? true : false;
+                        reloadTodoListCommand.Execute();
+                    }
+                ));
+            }
+        }
+
+        private DelegateCommand<object> changeResultCountLimit;
+        public DelegateCommand<object> ChangeResultCountLimit {
+            get {
+                return changeResultCountLimit ?? (changeResultCountLimit = new DelegateCommand<object>(
+                    (object param) => {
+                        todoSearchOption.ResultCountLimit = long.Parse((string)param);
+                        reloadTodoListCommand.Execute();
+                    }
+                ));
+            }
+        }
+
+        private DelegateCommand<object> changeSearchStartPointCommand;
+        public DelegateCommand<object> ChangeSearchStartPointCommand {
+            get {
+                return changeSearchStartPointCommand ?? (changeSearchStartPointCommand = new DelegateCommand<object>(
+                    (object param) => {
+                        todoSearchOption.SearchStartPoint = DateTime.Now.AddDays(double.Parse((string)param));
+                        reloadTodoListCommand.Execute();
+                    }
+                ));
             }
         }
     }

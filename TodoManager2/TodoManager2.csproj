@@ -91,8 +91,10 @@
   <ItemGroup>
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="model\DatabaseHelper.cs" />
+    <Compile Include="model\Tag.cs" />
     <Compile Include="model\Todo.cs" />
     <Compile Include="model\TodoReaderWriter.cs" />
+    <Compile Include="model\TodoSearchOption.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

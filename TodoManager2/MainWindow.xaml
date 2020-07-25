@@ -35,6 +35,187 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
+        <Grid Grid.Column="0"
+              Grid.RowSpan="2">
+            <StackPanel>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="検索期間指定"
+                               Grid.Column="0"
+                               HorizontalAlignment="Center"
+                               />
+                    <ComboBox Grid.Column="1">
+
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding ChangeSearchStartPointCommand}"
+                                                       CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ComboBox},
+                                                       Path=SelectedItem.Tag}"
+                                                       />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
+                        <ComboBoxItem Content="今日のタスク"
+                                      HorizontalAlignment="Stretch">
+                            <ComboBoxItem.Tag> -1 </ComboBoxItem.Tag>
+                        </ComboBoxItem>
+
+                        <ComboBoxItem Content="３日前まで"
+                                      HorizontalAlignment="Stretch">
+                            <ComboBoxItem.Tag> -3 </ComboBoxItem.Tag>
+                        </ComboBoxItem>
+
+                        <ComboBoxItem Content="１週間前まで"
+                                      IsSelected="True"
+                                      HorizontalAlignment="Stretch">
+                            <ComboBoxItem.Tag> -7 </ComboBoxItem.Tag>
+                        </ComboBoxItem>
+
+                        <ComboBoxItem Content="１ヶ月前まで"
+                                      HorizontalAlignment="Stretch">
+                            <ComboBoxItem.Tag> -30 </ComboBoxItem.Tag>
+                        </ComboBoxItem>
+
+                        <ComboBoxItem Content="６ヶ月前まで"
+                                      HorizontalAlignment="Stretch">
+                            <ComboBoxItem.Tag> -180 </ComboBoxItem.Tag>
+                        </ComboBoxItem>
+
+                        <ComboBoxItem Content="期間無指定"
+                                      HorizontalAlignment="Stretch">
+                            <ComboBoxItem.Tag> -100000 </ComboBoxItem.Tag>
+                        </ComboBoxItem>
+
+                    </ComboBox>
+                </Grid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="タグ検索方式"
+                               Margin="0,2,0,0"
+                               HorizontalAlignment="Center"
+                               Grid.Column="0"
+                               />
+                    <ComboBox Grid.Column="1" >
+
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding ChangeTagSearchTypeCommand}"
+                                                       CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ComboBox},
+                                                       Path=SelectedItem.Content}"
+                                                       />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <ComboBoxItem Content="AND"
+                                      HorizontalAlignment="Stretch">
+                        </ComboBoxItem>
+
+                        <ComboBoxItem Content="OR"
+                                      IsSelected="True"
+                                      HorizontalAlignment="Stretch">
+                        </ComboBoxItem>
+                    </ComboBox>
+                </Grid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="検索数上限"
+                               Grid.Column="0"
+                               HorizontalAlignment="Center"
+                               />
+                    <ComboBox Grid.Column="1">
+
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding ChangeResultCountLimit}"
+                                                       CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ComboBox},
+                                                       Path=SelectedItem.Tag}"
+                                                       />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
+                        <ComboBoxItem Content="100"
+                                      IsSelected="True"
+                                      HorizontalAlignment="Stretch">
+                            <ComboBoxItem.Tag>100</ComboBoxItem.Tag>
+                        </ComboBoxItem>
+
+                        <ComboBoxItem Content="200"
+                                      HorizontalAlignment="Stretch">
+                            <ComboBoxItem.Tag> 200 </ComboBoxItem.Tag>
+                        </ComboBoxItem>
+
+                        <ComboBoxItem Content="300"
+                                      HorizontalAlignment="Stretch">
+                            <ComboBoxItem.Tag> 300 </ComboBoxItem.Tag>
+                        </ComboBoxItem>
+                    </ComboBox>
+
+                </Grid>
+            
+                <Grid Margin="0,3,0,3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <CheckBox Content="未完了を表示"
+                              Grid.Column="0"
+                              HorizontalAlignment="Center"
+                              IsChecked="{Binding TodoSearchOption.ShouldSelectIncompleteTodo}"
+                              />
+
+                    <Border Background="Black"
+                            Width="1"
+                            Grid.Column="1"
+                            HorizontalAlignment="Left"
+                            Margin="3,0,0,0"
+                            />
+
+                    <CheckBox Content="完了を表示"
+                              Grid.Column="1"
+                              HorizontalAlignment="Center"
+                              IsChecked="{Binding TodoSearchOption.ShouldSelectComplitionTodo}"
+                              />
+                </Grid>
+
+                <ListView ItemsSource="{Binding TagList}"
+                          Grid.Column="0"
+                          >
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="tags"
+                                            Width="100"
+                                            DisplayMemberBinding="{Binding Content}"
+                                            />
+
+                            <GridViewColumn Header="check">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding IsChecked}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+
+            </StackPanel>
+        </Grid>
+
         <StackPanel Grid.Column="1"
                     Grid.Row="0"
                     >
