@@ -51,35 +51,44 @@
                                />
                     <ComboBox Grid.Column="1">
 
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding ChangeSearchStartPointCommand}"
+                                                       CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ComboBox},
+                                                       Path=SelectedItem.Tag}"
+                                                       />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
                         <ComboBoxItem Content="今日のタスク"
                                       HorizontalAlignment="Stretch">
-                            <ComboBoxItem.Tag> 1 </ComboBoxItem.Tag>
+                            <ComboBoxItem.Tag> -1 </ComboBoxItem.Tag>
                         </ComboBoxItem>
 
                         <ComboBoxItem Content="３日前まで"
                                       HorizontalAlignment="Stretch">
-                            <ComboBoxItem.Tag> 3 </ComboBoxItem.Tag>
+                            <ComboBoxItem.Tag> -3 </ComboBoxItem.Tag>
                         </ComboBoxItem>
 
                         <ComboBoxItem Content="１週間前まで"
                                       IsSelected="True"
                                       HorizontalAlignment="Stretch">
-                            <ComboBoxItem.Tag> 7 </ComboBoxItem.Tag>
+                            <ComboBoxItem.Tag> -7 </ComboBoxItem.Tag>
                         </ComboBoxItem>
 
                         <ComboBoxItem Content="１ヶ月前まで"
                                       HorizontalAlignment="Stretch">
-                            <ComboBoxItem.Tag> 30 </ComboBoxItem.Tag>
+                            <ComboBoxItem.Tag> -30 </ComboBoxItem.Tag>
                         </ComboBoxItem>
 
                         <ComboBoxItem Content="６ヶ月前まで"
                                       HorizontalAlignment="Stretch">
-                            <ComboBoxItem.Tag> 180 </ComboBoxItem.Tag>
+                            <ComboBoxItem.Tag> -180 </ComboBoxItem.Tag>
                         </ComboBoxItem>
 
                         <ComboBoxItem Content="期間無指定"
                                       HorizontalAlignment="Stretch">
-                            <ComboBoxItem.Tag> -1 </ComboBoxItem.Tag>
+                            <ComboBoxItem.Tag> -100000 </ComboBoxItem.Tag>
                         </ComboBoxItem>
 
                     </ComboBox>

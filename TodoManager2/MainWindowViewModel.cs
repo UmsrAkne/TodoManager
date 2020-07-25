@@ -136,5 +136,16 @@ namespace TodoManager2 {
                 ));
             }
         }
+
+        private DelegateCommand<object> changeSearchStartPointCommand;
+        public DelegateCommand<object> ChangeSearchStartPointCommand {
+            get {
+                return changeSearchStartPointCommand ?? (changeSearchStartPointCommand = new DelegateCommand<object>(
+                    (object param) => {
+                        todoSearchOption.SearchStartPoint = DateTime.Now.AddDays(double.Parse((string)param));
+                    }
+                ));
+            }
+        }
     }
 }
