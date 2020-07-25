@@ -268,6 +268,8 @@ namespace TodoManager2.model {
 
             // 完了、未完了の Todo をフィルタリング
             if(searchOption.ShouldSelectComplitionTodo || searchOption.ShouldSelectIncompleteTodo) {
+                narrowDownTodoTableSQL += " (";
+
                 if (searchOption.ShouldSelectComplitionTodo) {
                     narrowDownTodoTableSQL += nameof(Todo.IsCompleted) + " = 'True'";
                 }
@@ -278,6 +280,8 @@ namespace TodoManager2.model {
                     }
                     narrowDownTodoTableSQL += nameof(Todo.IsCompleted) + " = 'False'";
                 }
+
+                narrowDownTodoTableSQL += ")";
             }
 
             var commandText = "";
