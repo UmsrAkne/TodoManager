@@ -94,12 +94,21 @@ namespace TodoManager2 {
                         todo.DueDayNumber = CreatingTodo.DueDayNumber;
 
                         todo.Tags = CreatingTodo.Tags.Where(t => t.Content != "").ToList();
+
+                        List<long> tagIDs = new List<long>();
                         todo.Tags.ForEach(t => {
                             var tagDics = todoReaderWriter.getTags(todoReaderWriter.tagsTableName, TagsTableColumnName.name.ToString());
-                            if(tagDics.Count == 0) {
+                            if(tagDics.Count != 0) {
                                 todoReaderWriter.addTag(todoReaderWriter.tagsTableName, TagsTableColumnName.name.ToString(), t.Content);
+                                long tagID = todoReaderWriter.getTagID(todoReaderWriter.tagsTableName, t.Content);
+                                if (tagID >= 0) {
+                                    tagIDs.Add(tagID);
+                                }
                             }
                         });
+
+                        long todoID = databaseHelper.getMaxInColumn(todoReaderWriter.todoTableName, "id");
+                        tagIDs.ForEach(tID => todoReaderWriter.attachTag(todoID, tID));
 
                         todoReaderWriter.add(todo);
                         CreatingTodo = new Todo();
