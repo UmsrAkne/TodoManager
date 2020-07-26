@@ -69,6 +69,21 @@ namespace TodoManager2.model {
             };
 
             dbHelper.insert(todoTableName, columnNames, values);
+
+            todo.Tags = todo.Tags.Where(t => t.Content != "").ToList();
+            List<long> tagIDs = new List<long>();
+            todo.Tags.ForEach(t => {
+                var tagDics = getTags(tagsTableName, TagsTableColumnName.name.ToString());
+                if(tagDics.Count != 0) {
+                    addTag(tagsTableName, TagsTableColumnName.name.ToString(), t.Content);
+                    long tagID = getTagID(tagsTableName, t.Content);
+                    if (tagID >= 0) {
+                        tagIDs.Add(tagID);
+                    }
+                }
+            });
+
+            tagIDs.ForEach(tID => attachTag(newID, tID));
         }
 
         public Todo getTodo(int id) {
