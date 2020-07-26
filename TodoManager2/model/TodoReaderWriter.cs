@@ -188,6 +188,13 @@ namespace TodoManager2.model {
             return tags;
         }
 
+        public long getTagID(string tagTableName, string tag) {
+            var commandText = "SELECT " + TagsTableColumnName.id.ToString() + " FROM " + tagTableName + " "
+                            + "WHERE " + TagsTableColumnName.name.ToString() + " = " + "'" + tag + "'";
+            var dics = dbHelper.select(commandText);
+            return dics.Count == 0 ? -1 : (long)dics[0]["id"];
+        }
+
         public void addTag(string tagMapTableName,string tagNameColumnName, string tag) {
             long tagID = 0;
             if(dbHelper.getRecordCount(tagMapTableName) > 0) {
