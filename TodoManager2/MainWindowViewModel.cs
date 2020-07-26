@@ -93,6 +93,14 @@ namespace TodoManager2 {
                         todo.IsCompleted = CreatingTodo.IsCompleted;
                         todo.DueDayNumber = CreatingTodo.DueDayNumber;
 
+                        todo.Tags = CreatingTodo.Tags.Where(t => t.Content != "").ToList();
+                        todo.Tags.ForEach(t => {
+                            var tagDics = todoReaderWriter.getTags(todoReaderWriter.tagsTableName, TagsTableColumnName.name.ToString());
+                            if(tagDics.Count == 0) {
+                                todoReaderWriter.addTag(todoReaderWriter.tagsTableName, TagsTableColumnName.name.ToString(), t.Content);
+                            }
+                        });
+
                         todoReaderWriter.add(todo);
                         CreatingTodo = new Todo();
                         reloadTodoListCommand.Execute();
