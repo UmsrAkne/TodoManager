@@ -204,7 +204,20 @@
                             <GridViewColumn Header="check">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox IsChecked="{Binding IsChecked}" />
+                                        <CheckBox IsChecked="{Binding IsChecked}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Checked">
+                                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}
+                                                        ,Path=DataContext.ChangeCheckedTagCommand}"/>
+                                                </i:EventTrigger>
+
+                                                <i:EventTrigger EventName="Unchecked">
+                                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}
+                                                        ,Path=DataContext.ChangeCheckedTagCommand}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </CheckBox>
+
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

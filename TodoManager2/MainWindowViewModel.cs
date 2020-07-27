@@ -160,5 +160,18 @@ namespace TodoManager2 {
                 ));
             }
         }
+
+        private DelegateCommand changeCheckedTagCommand;
+        public DelegateCommand ChangeCheckedTagCommand {
+            get {
+                return changeCheckedTagCommand ?? (changeCheckedTagCommand = new DelegateCommand(
+                    () => {
+                        todoSearchOption.Tags = TagList.Where(t => t.IsChecked).ToList();
+                        reloadTodoListCommand.Execute();
+                    }
+                ));
+            }
+
+        }
     }
 }
