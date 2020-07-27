@@ -17,7 +17,7 @@ namespace TodoManager2.model {
             }
         }
 
-        private Boolean tagSearchTypeisOR = false;
+        private Boolean tagSearchTypeisOR = true;
 
         /// <summary>
         /// タグ検索の方式が OR 検索であるかどうかを示します。
