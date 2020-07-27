@@ -53,6 +53,7 @@ namespace TodoManager2 {
             buildDatabase();
 
             TodoList = todoReaderWriter.getTodosWithin(DateTime.MinValue, DateTime.Now);
+            TagList = todoReaderWriter.getTags(todoReaderWriter.tagsTableName);
         }
 
         private void buildDatabase() {

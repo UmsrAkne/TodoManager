@@ -203,6 +203,20 @@ namespace TodoManager2.model {
             return tags;
         }
 
+        public List<Tag> getTags(string tagsTableName) {
+            var commandText = "SELECT " + TagsTableColumnName.name.ToString() + ", " + TagsTableColumnName.id.ToString()
+                            + " FROM " + tagsTableName;
+            var dics = dbHelper.select(commandText);
+            List<Tag> tags = new List<Tag>();
+            dics.ForEach(t => {
+                Tag tag = new Tag((string)t[TagsTableColumnName.name.ToString()]);
+                tag.ID = (long)t[TagsTableColumnName.id.ToString()];
+                tags.Add(tag);
+            });
+
+            return tags;
+        }
+
         public long getTagID(string tagTableName, string tag) {
             var commandText = "SELECT " + TagsTableColumnName.id.ToString() + " FROM " + tagTableName + " "
                             + "WHERE " + TagsTableColumnName.name.ToString() + " = " + "'" + tag + "'";
