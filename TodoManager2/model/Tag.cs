@@ -21,8 +21,8 @@ namespace TodoManager2.model {
             }
         }
 
-        private int id;
-        public int ID {
+        private long id;
+        public long ID {
             get => id;
             set {
                 id = value;
