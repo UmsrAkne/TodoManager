@@ -53,6 +53,7 @@ namespace TodoManager2 {
             buildDatabase();
 
             TodoList = todoReaderWriter.getTodosWithin(DateTime.MinValue, DateTime.Now);
+            TagList = todoReaderWriter.getTags(todoReaderWriter.tagsTableName);
         }
 
         private void buildDatabase() {
@@ -92,6 +93,7 @@ namespace TodoManager2 {
                         todo.Priority = CreatingTodo.Priority;
                         todo.IsCompleted = CreatingTodo.IsCompleted;
                         todo.DueDayNumber = CreatingTodo.DueDayNumber;
+                        todo.Tags = CreatingTodo.Tags;
 
                         todoReaderWriter.add(todo);
                         CreatingTodo = new Todo();
@@ -157,6 +159,19 @@ namespace TodoManager2 {
                     }
                 ));
             }
+        }
+
+        private DelegateCommand changeCheckedTagCommand;
+        public DelegateCommand ChangeCheckedTagCommand {
+            get {
+                return changeCheckedTagCommand ?? (changeCheckedTagCommand = new DelegateCommand(
+                    () => {
+                        todoSearchOption.Tags = TagList.Where(t => t.IsChecked).ToList();
+                        reloadTodoListCommand.Execute();
+                    }
+                ));
+            }
+
         }
     }
 }

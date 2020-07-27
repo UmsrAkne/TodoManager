@@ -100,7 +100,7 @@ namespace TodoManager2.model {
 
         public TimeSpan WorkSpan { get; set; } = new TimeSpan();
 
-        public List<String> Tags { get; set; } = new List<string>();
+        public List<Tag> Tags { get; set; } = new List<Tag>(new Tag[] { new Tag(""),new Tag(""),new Tag("")});
 
         public string Priority { get; set; } = "D";
 
