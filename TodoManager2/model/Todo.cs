@@ -69,6 +69,15 @@ namespace TodoManager2.model {
             }
         }
 
+        /// <summary>
+        /// 完了日時の日付を初期化します。
+        /// 完了日時が初期状態ということは、未完了状態と同義です。そのため IsCompleted も false にセットされますので注意してください。
+        /// </summary>
+        public void ResetCompletionDateTime() {
+            isCompleted = false;
+            CompletionDateTime = new DateTime();
+        }
+
         public String CompletionDateTimeString {
             get {
                 return (CompletionDateTime != DateTime.MinValue) ? CompletionDateTime.ToString("MM/dd HH:mm") : "";
