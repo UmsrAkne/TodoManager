@@ -171,7 +171,46 @@ namespace TodoManager2 {
                     }
                 ));
             }
+        }
 
+        private DelegateCommand<object> copyTodoCommand;
+        public DelegateCommand<object> CopyTodoCommand {
+            get {
+                return copyTodoCommand ?? (copyTodoCommand = new DelegateCommand<object>(
+                    (object param) => {
+                        var clone = copyTodo((Todo)param);
+                        clone.ResetCompletionDateTime();
+                        CreatingTodo = clone;
+                    }
+                ));
+            }
+        }
+
+        private DelegateCommand<Todo> addCloneCommand;
+        public DelegateCommand<Todo> AddCloneCommand {
+            get {
+                return addCloneCommand ?? (addCloneCommand = new DelegateCommand<Todo>(
+                    (Todo t) => {
+                        var clone = copyTodo(t);
+                        clone.ResetCompletionDateTime();
+                        todoReaderWriter.add(clone);
+                        reloadTodoListCommand.Execute();
+                    }
+                ));
+            }
+        }
+
+        private Todo copyTodo(Todo sourceTodo) {
+            Todo todo = new Todo(DateTime.Now, 0);
+            todo.Title = sourceTodo.Title;
+            todo.Text = sourceTodo.Text;
+            todo.WorkSpan = sourceTodo.WorkSpan;
+            todo.Priority = sourceTodo.Priority;
+            todo.IsCompleted = sourceTodo.IsCompleted;
+            todo.DueDayNumber = sourceTodo.DueDayNumber;
+            todo.Tags = sourceTodo.Tags;
+
+            return todo;
         }
     }
 }
