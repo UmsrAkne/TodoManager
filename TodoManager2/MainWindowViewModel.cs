@@ -180,6 +180,16 @@ namespace TodoManager2 {
                     (object param) => {
                         CreatingTodo = copyTodo((Todo)param);
                         CreatingTodo.IsCompleted = false;
+
+        private DelegateCommand<Todo> addCloneCommand;
+        public DelegateCommand<Todo> AddCloneCommand {
+            get {
+                return addCloneCommand ?? (addCloneCommand = new DelegateCommand<Todo>(
+                    (Todo t) => {
+                        var clone = copyTodo(t);
+                        clone.ResetCompletionDateTime();
+                        todoReaderWriter.add(clone);
+                        reloadTodoListCommand.Execute();
                     }
                 ));
             }

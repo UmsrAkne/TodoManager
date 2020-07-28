@@ -424,6 +424,12 @@
                               Command="{Binding CopyTodoCommand}"
                               CommandParameter="{Binding Path=PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                               />
+
+                    <MenuItem Header="Todoを複製して投稿"
+                              Command="{Binding AddCloneCommand}"
+                              CommandParameter="{Binding Path=PlacementTarget.SelectedItem, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                              />
+
                 </ContextMenu>
             </ListView.ContextMenu>
 
