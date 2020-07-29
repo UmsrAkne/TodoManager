@@ -98,12 +98,10 @@ namespace TodoManager2.model {
             get => DueDateTime.ToString("MM/dd");
         }
 
-        private int workSpanMinutes = 0;
         public int WorkSpanMinutes {
-            get => workSpanMinutes;
+            get => (int)WorkSpan.TotalMinutes;
             set {
-                workSpanMinutes = value;
-                WorkSpan = new TimeSpan(0, workSpanMinutes, 0);
+                WorkSpan = new TimeSpan(0, value, 0);
             }
         }
 
